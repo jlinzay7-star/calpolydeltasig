@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delta Sigma Pi - Kappa Mu Chapter | Cal Poly SLO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'dsp-gold': '#CFB53B',
+            'dsp-gold-light': '#DBCA6A',
+            'dsp-gold-dark': '#B59A1F',
+            'dsp-dark': '#FFFFFF',
+            'dsp-darker': '#F5F3EF',
+            'dsp-navy': '#16213E',
+            'dsp-surface': '#FFFFFF',
+            'dsp-text': '#1C1C2E',
+            'dsp-muted': '#6B7280',
+            'dsp-purple': '#7851A9',
+            'dsp-purple-light': '#9B7DC8',
+          },
+          fontFamily: {
+            'display': ['Playfair Display', 'serif'],
+            'body': ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #F5F3EF; color: #1C1C2E; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    html { scrollbar-width: none; }
+
+    .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(207, 181, 59, 0.2); box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .glass-card { background: #FFFFFF; border: 1px solid rgba(207, 181, 59, 0.12); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .gold-text { background: linear-gradient(135deg, #CFB53B, #DBCA6A, #E8D48B, #CFB53B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .gold-gradient { background: linear-gradient(135deg, #CFB53B, #DBCA6A, #B59A1F); }
+    .gold-border { border: 1px solid rgba(207, 181, 59, 0.3); }
+
+    .card-hover { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease, border-color 0.4s ease; }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0,0,0,0.1), 0 0 30px rgba(207,181,59,0.08); border-color: rgba(207,181,59,0.3); }
+
+    /* Brother card interactive effects */
+    .brother-card { position: relative; transform-style: preserve-3d; will-change: transform; transition: transform 0.15s ease-out, box-shadow 0.4s ease, border-color 0.4s ease; overflow: hidden; }
+    .brother-card .brother-photo { transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .brother-card:hover .brother-photo { transform: scale(1.08); }
+    .brother-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(207,181,59,0.06) 45%, rgba(207,181,59,0.12) 50%, rgba(207,181,59,0.06) 55%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.7s ease;
+      pointer-events: none; z-index: 10; border-radius: inherit;
+    }
+    .brother-card:hover::after { transform: translateX(100%); }
+    .brother-card .card-glow { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 5; border-radius: inherit; }
+    .brother-card:hover .card-glow { opacity: 1; }
+
+    .logo-grayscale { opacity: 0.7; transition: all 0.4s ease; }
+    .logo-grayscale:hover { opacity: 1; transform: scale(1.12); filter: drop-shadow(0 4px 12px rgba(207,181,59,0.3)); }
+
+    /* Loading */
+    #loading-overlay { transition: opacity 0.6s ease, visibility 0.6s ease; }
+    #loading-overlay.hidden { opacity: 0; visibility: hidden; }
+    @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 20px rgba(207,181,59,0.3); } 50% { box-shadow: 0 0 50px rgba(207,181,59,0.6); } }
+    .pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
+
+    /* Hero interactive layers */
+    #hero-bg { transition: transform 0.4s cubic-bezier(0.03, 0.98, 0.52, 0.99); }
+    .hero-text-container { transition: transform 0.4s cubic-bezier(0.03, 0.98, 0.52, 0.99), opacity 0.3s ease; }
+    .hero-letter { display: inline-block; transition: transform 0.3s ease-out; will-change: transform; }
+
+    /* Pillar word hover effects */
+    .pillar-word { position: relative; transition: all 0.4s ease; cursor: default; }
+    .pillar-word::after {
+      content: ''; position: absolute; bottom: -4px; left: 10%; right: 10%; height: 1.5px;
+      background: linear-gradient(90deg, transparent, #CFB53B, transparent);
+      transform: scaleX(0); transition: transform 0.4s ease;
+    }
+    .pillar-word:hover::after { transform: scaleX(1); }
+    .pillar-word:hover {
+      -webkit-text-fill-color: #FFFFFF !important;
+      background: none !important;
+      text-shadow: 0 0 20px rgba(207,181,59,0.5), 0 0 40px rgba(207,181,59,0.2);
+      transform: scale(1.12) translateY(-2px);
+    }
+
+    /* Pillar ripple effect */
+    .pillar-ripple {
+      position: absolute; border: 1.5px solid rgba(207,181,59,0.5);
+      border-radius: 50%; pointer-events: none;
+      animation: rippleOut 0.8s ease-out forwards;
+    }
+    @keyframes rippleOut {
+      0% { width: 0; height: 0; opacity: 1; transform: translate(-50%,-50%); }
+      100% { width: 200px; height: 200px; opacity: 0; transform: translate(-50%,-50%); }
+    }
+
+    /* Subtitle typing cursor */
+    .typing-cursor {
+      display: inline-block; width: 2px; height: 1em; background: #CFB53B;
+      margin-left: 4px; vertical-align: middle;
+      animation: cursorBlink 0.8s step-end infinite;
+    }
+    @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* SVG line draw animation */
+    .hero-line-animate line { animation: drawLine 1.5s ease-out forwards; }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+    /* Film grain overlay */
+    #hero-grain {
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+    }
+
+    /* Bounce arrow */
+    @keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
+    .bounce-slow { animation: bounce-slow 2s ease-in-out infinite; }
+
+    /* Marquee */
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .marquee-track { animation: marquee 40s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* Testimonial carousel */
+    .carousel-slide { transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease; }
+
+    /* Timeline */
+    .timeline-dot { transition: all 0.4s ease; }
+    .timeline-dot.active { background: #CFB53B; box-shadow: 0 0 20px rgba(207,181,59,0.5); transform: scale(1.3); }
+
+    /* Lightbox */
+    #lightbox { transition: opacity 0.3s ease, visibility 0.3s ease; }
+    #lightbox.hidden { opacity: 0; visibility: hidden; }
+    #lightbox img { transition: transform 0.3s ease; }
+
+    /* Tab active */
+    .tab-btn { transition: all 0.3s ease; position: relative; }
+    .tab-btn::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: #CFB53B; transform: scaleX(0); transition: transform 0.3s ease; }
+    .tab-btn.active::after { transform: scaleX(1); }
+    .tab-btn.active { color: #CFB53B; }
+
+    /* Section fade in */
+    .reveal { }
+
+    /* Page content (tab navigation) */
+    .page-content { display: none; }
+    .page-content.active { display: block; }
+
+    /* Navbar transparent over hero */
+    #navbar.navbar-hero .nav-link.tab-btn { color: rgba(255,255,255,0.85); }
+    #navbar.navbar-hero .nav-link.tab-btn:hover { color: #CFB53B; }
+    #navbar.navbar-hero .nav-link.tab-btn.active { color: #CFB53B; }
+    #navbar.navbar-hero .logo-img { filter: brightness(1) drop-shadow(0 1px 3px rgba(0,0,0,0.3)); }
+    #navbar.glass .logo-img { filter: brightness(0.15); }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F5F3EF; }
+    ::-webkit-scrollbar-thumb { background: #CFB53B; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #DBCA6A; }
+
+    /* Photo grid */
+    .photo-item { overflow: hidden; border-radius: 0.75rem; }
+    .photo-item img { transition: transform 0.5s ease; }
+    .photo-item:hover img { transform: scale(1.08); }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 z-[60] bg-[#F5F3EF] flex flex-col items-center justify-center">
+    <img src="images/WebsiteLogo-300w.png" alt="DSP Logo" class="w-24 h-24 object-contain pulse-gold rounded-full mb-6">
+    <h2 class="font-display text-2xl gold-text">Delta Sigma Pi</h2>
+    <p class="text-dsp-muted text-sm mt-2 tracking-widest uppercase">Kappa Mu Chapter</p>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="#" class="flex items-center shrink-0 nav-link" data-page="home">
+          <img src="images/WebsiteLogo-500w.png" alt="Delta Sigma Pi - Kappa Mu Chapter" class="h-14 object-contain logo-img transition-all duration-300">
+        </a>
+        <div class="hidden lg:flex items-center gap-1">
+          <a href="#" class="nav-link tab-btn active px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="home">Home</a>
+          <a href="#" class="nav-link tab-btn px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="recruitment">Recruitment</a>
+          <a href="#" class="nav-link tab-btn px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="brothers">Brothers</a>
+          <a href="#" class="nav-link tab-btn px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="leadership">Leadership</a>
+          <a href="#" class="nav-link tab-btn px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="awards">Awards</a>
+          <a href="#" class="nav-link tab-btn px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="photos">Photos</a>
+          <a href="#" class="nav-link tab-btn px-3 py-2 text-sm font-medium text-dsp-text hover:text-dsp-gold transition-colors" data-page="alumni">Alumni</a>
+        </div>
+        <button id="hamburger" class="lg:hidden flex flex-col gap-1.5 p-2 z-[110]" aria-label="Menu">
+          <span class="block w-6 h-0.5 bg-dsp-text transition-all duration-300 origin-center"></span>
+          <span class="block w-6 h-0.5 bg-dsp-text transition-all duration-300"></span>
+          <span class="block w-6 h-0.5 bg-dsp-text transition-all duration-300 origin-center"></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden fixed inset-0 w-screen h-screen bg-[#1C1C2E] backdrop-blur-xl z-[100] flex flex-col items-center justify-center gap-6 opacity-0 pointer-events-none transition-all duration-500">
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="home">Home</a>
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="recruitment">Recruitment</a>
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="brothers">Brothers</a>
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="leadership">Leadership</a>
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="awards">Awards</a>
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="photos">Photos</a>
+      <a href="#" class="mobile-nav text-2xl font-display text-white hover:text-dsp-gold transition-colors" data-page="alumni">Alumni</a>
+      <div class="flex gap-4 mt-8">
+        <a href="https://www.instagram.com/calpolydeltasig/" target="_blank" class="w-10 h-10 rounded-full border border-dsp-gold/30 flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/cpdeltasigmapi" target="_blank" class="w-10 h-10 rounded-full border border-dsp-gold/30 flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======================== HERO (Home Page) ======================== -->
+  <div class="page-content active" data-page="home">
+  <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden" style="perspective: 1200px;">
+    <!-- SVG defs for gold gradient -->
+    <svg class="absolute" width="0" height="0" aria-hidden="true">
+      <defs>
+        <linearGradient id="gold-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="transparent"/>
+          <stop offset="30%" stop-color="#CFB53B"/>
+          <stop offset="50%" stop-color="#DBCA6A"/>
+          <stop offset="70%" stop-color="#CFB53B"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <!-- Layer 0: Background image -->
+    <div id="hero-bg" class="absolute inset-0 z-0">
+      <img src="images/Yoga-Banner-2500w.jpeg" alt="" class="w-full h-full object-cover" style="transform: scale(1.4); filter: blur(8px);">
+    </div>
+    <!-- Layer 1: Gradient overlays -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20 z-[1]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent z-[1]"></div>
+    <!-- Layer 2: Cursor glow -->
+    <div id="hero-glow" class="absolute inset-0 z-[2] pointer-events-none opacity-0 transition-opacity duration-500"></div>
+    <!-- Layer 3: Cursor trail container -->
+    <div id="hero-trail" class="absolute inset-0 z-[3] pointer-events-none overflow-hidden"></div>
+    <!-- Layer 4: Film grain -->
+    <div id="hero-grain" class="absolute inset-0 z-[4] pointer-events-none"></div>
+    <!-- Layer 10: Text content -->
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto hero-text-container" style="transform-style: preserve-3d;">
+      <!-- Top accent line -->
+      <svg class="hero-line mx-auto mb-6" width="200" height="2" viewBox="0 0 200 2" style="opacity:0;">
+        <line x1="0" y1="1" x2="200" y2="1" stroke="url(#gold-line-grad)" stroke-width="1.5" stroke-dasharray="200" stroke-dashoffset="200"/>
+      </svg>
+      <h1 class="font-display text-5xl sm:text-6xl md:text-8xl font-bold text-white mb-4" id="hero-title" style="text-shadow: 0 4px 30px rgba(0,0,0,0.5);">DELTA SIGMA PI</h1>
+      <p id="hero-subtitle" class="text-dsp-gold tracking-[0.3em] uppercase text-sm sm:text-base mb-8" style="opacity:0;">Kappa Mu Chapter at Cal Poly SLO</p>
+      <div class="flex items-center justify-center gap-6 sm:gap-10 mt-2 flex-wrap">
+        <span class="pillar-word gold-text font-display font-semibold text-lg sm:text-2xl cursor-default" data-pillar="0" style="opacity:0;">Brotherhood</span>
+        <span class="hero-dot text-dsp-gold/30 text-2xl" style="opacity:0;">&bull;</span>
+        <span class="pillar-word gold-text font-display font-semibold text-lg sm:text-2xl cursor-default" data-pillar="1" style="opacity:0;">Professionalism</span>
+        <span class="hero-dot text-dsp-gold/30 text-2xl" style="opacity:0;">&bull;</span>
+        <span class="pillar-word gold-text font-display font-semibold text-lg sm:text-2xl cursor-default" data-pillar="2" style="opacity:0;">Community Service</span>
+      </div>
+      <!-- Bottom accent line -->
+      <svg class="hero-line mx-auto mt-6" width="120" height="2" viewBox="0 0 120 2" style="opacity:0;">
+        <line x1="0" y1="1" x2="120" y2="1" stroke="url(#gold-line-grad)" stroke-width="1.5" stroke-dasharray="120" stroke-dashoffset="120"/>
+      </svg>
+      <p id="hero-est" class="text-[#9CA3AF] text-sm mt-8 tracking-widest" style="opacity:0;">EST. APRIL 4, 1981</p>
+    </div>
+    <a href="#pillars" class="hero-scroll-arrow absolute bottom-10 left-1/2 -translate-x-1/2 z-10 bounce-slow text-white/50 hover:text-dsp-gold transition-colors" onclick="event.preventDefault(); document.getElementById('pillars').scrollIntoView({behavior:'smooth'})" style="opacity:0;">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+    </a>
+  </section>
+
+  <!-- ======================== PILLARS ======================== -->
+  <section id="pillars" class="py-24 sm:py-32 bg-dsp-dark relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Our Foundation</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text mb-6">What We Stand For</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mb-6"></div>
+        <p class="text-dsp-muted max-w-2xl mx-auto leading-relaxed">Founded in 1981, the Kappa Mu Chapter of Delta Sigma Pi is the foremost professional business fraternity on Cal Poly's campus. We develop and shape our brothers through our three pillars.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 stagger-cards">
+        <!-- Professionalism -->
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="h-56 overflow-hidden">
+            <img src="images/768F2FA5-2F1A-4B5A-9277-7D409FF2C0DB-750w.jpeg" alt="Professionalism" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+          </div>
+          <div class="p-6 sm:p-8">
+            <div class="w-12 h-12 rounded-xl gold-gradient flex items-center justify-center mb-4 -mt-12 relative z-10 shadow-lg">
+              <svg class="w-6 h-6 text-[#1C1C2E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-dsp-text mb-3">Professionalism</h3>
+            <p class="text-dsp-muted text-sm leading-relaxed">Being a professional business fraternity, we pride ourselves on providing learn by doing experiences through professional and leadership opportunities. While we are a fraternity only open to students of the Orfalea College of Business, our brothers are interested in a wide variety of companies, positions and industries.</p>
+          </div>
+        </div>
+        <!-- Community Service -->
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="h-56 overflow-hidden">
+            <img src="images/Brotherhood-Photo-750w.jpeg" alt="Community Service" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+          </div>
+          <div class="p-6 sm:p-8">
+            <div class="w-12 h-12 rounded-xl gold-gradient flex items-center justify-center mb-4 -mt-12 relative z-10 shadow-lg">
+              <svg class="w-6 h-6 text-[#1C1C2E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-dsp-text mb-3">Community Service</h3>
+            <p class="text-dsp-muted text-sm leading-relaxed">Our brothers participate in various service events, utilizing our creativity and business skills to build the surrounding community and give back to others. The brothers of Kappa Mu are dedicated to making a lasting impact in San Luis Obispo County by volunteering in various ways including marathons, fundraisers and food drives.</p>
+          </div>
+        </div>
+        <!-- Brotherhood -->
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="h-56 overflow-hidden">
+            <img src="images/IMG_0797-750w.jpg" alt="Brotherhood" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy">
+          </div>
+          <div class="p-6 sm:p-8">
+            <div class="w-12 h-12 rounded-xl gold-gradient flex items-center justify-center mb-4 -mt-12 relative z-10 shadow-lg">
+              <svg class="w-6 h-6 text-[#1C1C2E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-dsp-text mb-3">Brotherhood</h3>
+            <p class="text-dsp-muted text-sm leading-relaxed">Our chapter has a unique and inclusive culture unmatched by any other fraternity, sorority, or organization. Our goal is to create a welcoming and inclusive environment, providing each and every brother the opportunity to feel connected with each other and to find their place within the chapter and university.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== STATS ======================== -->
+  <section id="stats" class="py-16 relative overflow-hidden">
+    <div class="absolute inset-0 gold-gradient opacity-10"></div>
+    <div class="absolute inset-0" style="background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px);"></div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div class="reveal">
+          <p class="text-4xl sm:text-5xl font-bold text-dsp-text counter" data-target="300000">0</p>
+          <p class="text-dsp-gold text-sm mt-2 tracking-wider uppercase">National Members</p>
+        </div>
+        <div class="reveal">
+          <p class="text-4xl sm:text-5xl font-bold text-dsp-text counter" data-target="200">0</p>
+          <p class="text-dsp-gold text-sm mt-2 tracking-wider uppercase">Collegiate Chapters</p>
+        </div>
+        <div class="reveal">
+          <p class="text-4xl sm:text-5xl font-bold text-dsp-text counter" data-target="1000">0</p>
+          <p class="text-dsp-gold text-sm mt-2 tracking-wider uppercase">Kappa Mu Initiates</p>
+        </div>
+        <div class="reveal">
+          <p class="text-4xl sm:text-5xl font-bold text-dsp-text counter" data-target="44">0</p>
+          <p class="text-dsp-gold text-sm mt-2 tracking-wider uppercase">Years at Cal Poly</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== PRESIDENT ======================== -->
+  <section id="president" class="py-24 sm:py-32 bg-dsp-darker relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">From Our Leader</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Message From The President</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6"></div>
+      </div>
+      <div class="grid lg:grid-cols-5 gap-12 items-start">
+        <div class="lg:col-span-2 flex flex-col items-center reveal">
+          <div class="w-48 h-48 rounded-full gold-gradient p-1 mb-6">
+            <img src="images/IMG_0797-500w.jpg" alt="Charlie Boarman" class="w-full h-full rounded-full object-cover">
+          </div>
+          <h3 class="font-display text-2xl font-bold text-dsp-text">Charlie Boarman</h3>
+          <p class="text-dsp-gold text-sm tracking-wider uppercase mt-1">Chapter President</p>
+          <a href="mailto:boarmancharlie@gmail.com" class="text-dsp-muted text-sm mt-3 hover:text-dsp-gold transition-colors">boarmancharlie@gmail.com</a>
+        </div>
+        <div class="lg:col-span-3 reveal">
+          <div class="relative">
+            <svg class="absolute -top-6 -left-4 w-16 h-16 text-dsp-gold/10" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+            <div class="space-y-4 text-dsp-text/90 leading-relaxed pl-4 border-l-2 border-dsp-gold/30">
+              <p>Founded on November 7, 1907, Delta Sigma Pi is a co-ed professional business fraternity organized to foster the study of business in universities. With over 300,000 members, we are one of the most prominent business fraternities across the nation.</p>
+              <p>The Kappa Mu Chapter of California Polytechnic State University, San Luis Obispo (SLO) was established on April 4, 1981. The Kappa Mu Chapter emphasizes its three pillars of professionalism, community service, and brotherhood.</p>
+              <p>The Kappa Mu chapter of Delta Sigma Pi provides professional opportunities through corporate tours, guest speakers, and our vast alumni network. With over 1,000 initiates, the Kappa Mu chapter has the resources to connect with brothers all over the world in a diverse set of industries.</p>
+              <p>This chapter capitalizes on giving back to the San Luis Obispo community to show our support and gratitude for local charities and organizations in the area. Delta Sigma Pi goes beyond professional and service aspects by connecting through brotherhood. It is through brotherhood that this chapter has bonded together to support each other at all times, and create memories that will last a lifetime. This chapter is a family not just for four years, but for life.</p>
+              <p class="text-dsp-muted italic">Please explore our website to learn more about Delta Sigma Pi, and do not hesitate to reach out to me to connect and learn more about the chapter.</p>
+            </div>
+            <p class="mt-6 text-dsp-gold font-display text-lg italic">Best, Charlie Boarman</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== ABOUT / HISTORY ======================== -->
+  <section id="about" class="py-24 sm:py-32 bg-dsp-dark relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Our Story</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">The History of Delta Sigma Pi</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6"></div>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <p class="text-dsp-text/90 leading-relaxed mb-6">Delta Sigma Pi is a co-ed professional business fraternity organized to foster the study of business in universities and was founded on November 7, 1907 at New York University by Harold Valentine Jacobs, Alexander Frank Makay, Alfred Moysello and Henry Albert Tienken.</p>
+          <p class="text-dsp-text/90 leading-relaxed mb-8">With over 280,000 members and 200 collegiate chapters around the country, Delta Sigma Pi continues to develop principled business leaders for the future by providing a lifetime of opportunity for our members.</p>
+          <!-- Timeline -->
+          <div class="space-y-8 relative before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-gradient-to-b before:from-dsp-gold/50 before:via-dsp-gold/30 before:to-transparent">
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg">
+                <span class="text-[10px] font-bold text-[#1C1C2E]">1</span>
+              </div>
+              <div>
+                <p class="text-dsp-gold font-semibold">November 7, 1907</p>
+                <p class="text-dsp-muted text-sm">Delta Sigma Pi founded at New York University</p>
+              </div>
+            </div>
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg">
+                <span class="text-[10px] font-bold text-[#1C1C2E]">2</span>
+              </div>
+              <div>
+                <p class="text-dsp-gold font-semibold">April 4, 1981</p>
+                <p class="text-dsp-muted text-sm">Kappa Mu Chapter chartered at Cal Poly SLO</p>
+              </div>
+            </div>
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg">
+                <span class="text-[10px] font-bold text-[#1C1C2E]">3</span>
+              </div>
+              <div>
+                <p class="text-dsp-gold font-semibold">Present Day</p>
+                <p class="text-dsp-muted text-sm">1,000+ initiates and growing strong</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Photo Slideshow -->
+        <div class="reveal">
+          <div class="relative rounded-2xl overflow-hidden shadow-2xl" id="slideshow">
+            <div class="aspect-[4/3] relative">
+              <img class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100" src="images/Website-Slideshow-1000w.jpeg" alt="Chapter photo" loading="lazy">
+              <img class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" src="images/_DSC6220-1000w.jpg" alt="Chapter photo" loading="lazy">
+              <img class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" src="images/IMG_1741-1000w.jpg" alt="Chapter photo" loading="lazy">
+              <img class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" src="images/IMG_1537-1000w.JPEG" alt="Chapter photo" loading="lazy">
+              <img class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" src="images/Website-Slideshow3-1000w.jpeg" alt="Chapter photo" loading="lazy">
+              <img class="slideshow-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" src="images/Website-Slideshow2-1000w.jpeg" alt="Chapter photo" loading="lazy">
+            </div>
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              <button class="slideshow-dot w-2.5 h-2.5 rounded-full bg-white/80 transition-all" data-index="0"></button>
+              <button class="slideshow-dot w-2.5 h-2.5 rounded-full bg-white/30 transition-all" data-index="1"></button>
+              <button class="slideshow-dot w-2.5 h-2.5 rounded-full bg-white/30 transition-all" data-index="2"></button>
+              <button class="slideshow-dot w-2.5 h-2.5 rounded-full bg-white/30 transition-all" data-index="3"></button>
+              <button class="slideshow-dot w-2.5 h-2.5 rounded-full bg-white/30 transition-all" data-index="4"></button>
+              <button class="slideshow-dot w-2.5 h-2.5 rounded-full bg-white/30 transition-all" data-index="5"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== COMPANIES ======================== -->
+  <section id="companies" class="py-24 sm:py-32 bg-dsp-darker relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Our Alumni Network</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Where Our Brothers Are Now</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6 mb-4"></div>
+        <p class="text-dsp-muted max-w-xl mx-auto">Our alumni network spans the world's top companies across every industry.</p>
+      </div>
+      <div class="overflow-hidden relative">
+        <div class="flex marquee-track" style="width: 300%;">
+          <div class="flex items-center justify-around gap-24 px-6 shrink-0" style="width: 50%;">
+            <img src="images/2000px-Deloitte.svg-200w.png" alt="Deloitte" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Apple-Logo-black-200w.png" alt="Apple" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Amazon-Logo-200w.png" alt="Amazon" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/EY-logo-li-200w.png" alt="EY" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/KPMG-200w.png" alt="KPMG" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/PricewaterhouseCoopers_Logo.svg-200w.png" alt="PwC" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/2000px-Oracle_logo.svg-200w.png" alt="Oracle" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/2000px-Intel-logo.svg-200w.png" alt="Intel" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/tesla-logo-2200x2800-200w.png" alt="Tesla" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Walt-Disney-logo-200w.png" alt="Disney" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Workday_Logo-200w.png" alt="Workday" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/1024px-HP_logo_2012.svg-200w.png" alt="HP" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+          </div>
+          <div class="flex items-center justify-around gap-24 px-6 shrink-0" style="width: 50%;">
+            <img src="images/2000px-Deloitte.svg-200w.png" alt="Deloitte" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Apple-Logo-black-200w.png" alt="Apple" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Amazon-Logo-200w.png" alt="Amazon" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/EY-logo-li-200w.png" alt="EY" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/KPMG-200w.png" alt="KPMG" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/PricewaterhouseCoopers_Logo.svg-200w.png" alt="PwC" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/2000px-Oracle_logo.svg-200w.png" alt="Oracle" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/2000px-Intel-logo.svg-200w.png" alt="Intel" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/tesla-logo-2200x2800-200w.png" alt="Tesla" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Walt-Disney-logo-200w.png" alt="Disney" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/Workday_Logo-200w.png" alt="Workday" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+            <img src="images/1024px-HP_logo_2012.svg-200w.png" alt="HP" class="h-10 sm:h-12 min-w-[60px] object-contain logo-grayscale" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /home page -->
+
+  <!-- ======================== RECRUITMENT PAGE ======================== -->
+  <div class="page-content" data-page="recruitment">
+  <section id="recruitment" class="py-24 sm:py-32 bg-dsp-dark relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Join Us</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Hear From Our Brothers</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6 mb-4"></div>
+        <p class="text-dsp-muted max-w-xl mx-auto">Don't just take our word for it — hear what our brothers have to say about their Delta Sigma Pi experience.</p>
+      </div>
+      <!-- Testimonial Carousel -->
+      <div class="relative max-w-4xl mx-auto" id="testimonial-carousel">
+        <div class="overflow-hidden rounded-2xl">
+          <div id="carousel-track" class="flex transition-transform duration-500 ease-out">
+            <!-- Testimonial 1 -->
+            <div class="w-full shrink-0 px-4">
+              <div class="glass-card rounded-2xl p-8 sm:p-10 text-center">
+                <svg class="w-10 h-10 text-dsp-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-dsp-text/90 text-lg leading-relaxed mb-6 font-light italic">"I chose to go to recruitment because coming into college, I wanted to find a sense of professionalism. I can say with my full heart that Delta Sigma Pi has done just that and more — I couldn't imagine my life without it."</p>
+                <p class="text-dsp-text font-semibold">Maya Thoma</p>
+                <p class="text-dsp-gold text-sm">4th Year</p>
+              </div>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="w-full shrink-0 px-4">
+              <div class="glass-card rounded-2xl p-8 sm:p-10 text-center">
+                <svg class="w-10 h-10 text-dsp-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-dsp-text/90 text-lg leading-relaxed mb-6 font-light italic">"After just the first day of recruitment, I knew that Deltasig was where I wanted to be. The energy and excitement in the room was something I had never quite experienced before. I knew right then that I had found a home in Deltasig!"</p>
+                <p class="text-dsp-text font-semibold">Ben Stenson</p>
+                <p class="text-dsp-gold text-sm">Alumni, Former President</p>
+              </div>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="w-full shrink-0 px-4">
+              <div class="glass-card rounded-2xl p-8 sm:p-10 text-center">
+                <svg class="w-10 h-10 text-dsp-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-dsp-text/90 text-lg leading-relaxed mb-6 font-light italic">"When I came to Cal Poly, I was determined to find a community of motivated and innovative students. After the first day of recruitment, I could sense this, along with a tight knit and positive community that I knew I wanted to be a part of. In Deltasig, I've found friends, mentors, and a constant support system."</p>
+                <p class="text-dsp-text font-semibold">Kendall Jones</p>
+                <p class="text-dsp-gold text-sm">4th Year</p>
+              </div>
+            </div>
+            <!-- Testimonial 4 -->
+            <div class="w-full shrink-0 px-4">
+              <div class="glass-card rounded-2xl p-8 sm:p-10 text-center">
+                <svg class="w-10 h-10 text-dsp-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-dsp-text/90 text-lg leading-relaxed mb-6 font-light italic">"The first step to the rest of your life!"</p>
+                <p class="text-dsp-text font-semibold">Ash Pickett</p>
+                <p class="text-dsp-gold text-sm">3rd Year</p>
+              </div>
+            </div>
+            <!-- Testimonial 5 -->
+            <div class="w-full shrink-0 px-4">
+              <div class="glass-card rounded-2xl p-8 sm:p-10 text-center">
+                <svg class="w-10 h-10 text-dsp-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-dsp-text/90 text-lg leading-relaxed mb-6 font-light italic">"Attending Deltasig's recruitment was the best college decision I ever made. I was thoroughly excited to return to each night to be surrounded by the most genuine, intelligent, and fun-spirited people that I would eventually call my best friends."</p>
+                <p class="text-dsp-text font-semibold">Alexis Giller</p>
+                <p class="text-dsp-gold text-sm">Alumni, Former SVP</p>
+              </div>
+            </div>
+            <!-- Testimonial 6 -->
+            <div class="w-full shrink-0 px-4">
+              <div class="glass-card rounded-2xl p-8 sm:p-10 text-center">
+                <svg class="w-10 h-10 text-dsp-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p class="text-dsp-text/90 text-lg leading-relaxed mb-6 font-light italic">"After the first day of recruitment my freshman year, I left knowing that these were the kind of people that I wanted to surround myself with. It was a family of different kinds of people, all motivated and excited about the fraternity — words I still use to describe this group 4 years later."</p>
+                <p class="text-dsp-text font-semibold">Jack Dunaway</p>
+                <p class="text-dsp-gold text-sm">Alumni, Former CSVP</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Carousel Controls -->
+        <button id="carousel-prev" class="absolute left-2 sm:left-0 top-1/2 -translate-y-1/2 sm:-translate-x-4 w-10 h-10 rounded-full glass-card flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all z-10">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+        </button>
+        <button id="carousel-next" class="absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 sm:translate-x-4 w-10 h-10 rounded-full glass-card flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all z-10">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+        </button>
+        <!-- Dots -->
+        <div class="flex justify-center gap-2 mt-6">
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-dsp-gold transition-all" data-index="0"></button>
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-dsp-muted/30 transition-all" data-index="1"></button>
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-dsp-muted/30 transition-all" data-index="2"></button>
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-dsp-muted/30 transition-all" data-index="3"></button>
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-dsp-muted/30 transition-all" data-index="4"></button>
+          <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-dsp-muted/30 transition-all" data-index="5"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /recruitment page -->
+
+  <!-- ======================== BROTHERS PAGE ======================== -->
+  <div class="page-content" data-page="brothers">
+  <section id="brothers" class="py-24 sm:py-32 bg-dsp-darker relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Our Members</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Collegiate Brothers</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6 mb-4"></div>
+        <p class="text-dsp-muted text-sm">71 brothers across 7 pledge classes</p>
+      </div>
+      <div id="brothers-scroll" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+    </div>
+  </section>
+
+  </div><!-- /brothers page -->
+
+  <!-- ======================== LEADERSHIP PAGE ======================== -->
+  <div class="page-content" data-page="leadership">
+  <section id="leadership" class="py-24 sm:py-32 bg-dsp-darker relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Our Leadership</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Executive Committee & Faculty</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6 mb-4"></div>
+        <p class="text-dsp-muted text-sm">17 student leaders &middot; 9 faculty brothers</p>
+      </div>
+      <div id="leadership-scroll" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+    </div>
+  </section>
+
+  </div><!-- /leadership page -->
+
+  <!-- ======================== AWARDS PAGE ======================== -->
+  <div class="page-content" data-page="awards">
+  <section id="awards" class="py-24 sm:py-32 bg-dsp-dark relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Recognition</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Chapter Awards</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6"></div>
+      </div>
+      <!-- Awards Timeline -->
+      <div class="max-w-3xl mx-auto mb-20">
+        <div class="space-y-8 relative before:absolute before:left-4 lg:before:left-1/2 before:top-0 before:bottom-0 before:w-0.5 before:bg-dsp-gold/20">
+          <div class="flex gap-6 items-start lg:flex-row-reverse lg:gap-12 reveal">
+            <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg lg:order-1">
+              <span class="text-[9px] font-bold text-[#1C1C2E]">24</span>
+            </div>
+            <div class="lg:text-right lg:flex-1">
+              <p class="text-dsp-gold font-semibold mb-2">2023–2024</p>
+              <div class="flex flex-wrap gap-2 lg:justify-end">
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Accredited Chapter</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">R. Nelson Mitchell Outstanding Collegiate Chapter</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Most Improved</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Scholastic Development</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-6 items-start lg:gap-12 reveal">
+            <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg">
+              <span class="text-[9px] font-bold text-[#1C1C2E]">23</span>
+            </div>
+            <div class="lg:flex-1">
+              <p class="text-dsp-gold font-semibold mb-2">2022–2023</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Accredited Chapter</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Most Improved</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Alumni Relations</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Scholastic Development</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-6 items-start lg:flex-row-reverse lg:gap-12 reveal">
+            <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg lg:order-1">
+              <span class="text-[9px] font-bold text-[#1C1C2E]">22</span>
+            </div>
+            <div class="lg:text-right lg:flex-1">
+              <p class="text-dsp-gold font-semibold mb-2">2021–2022</p>
+              <div class="flex flex-wrap gap-2 lg:justify-end">
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Accredited Chapter</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Service</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Professional Activities</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Scholastic Development</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Alumni Relations</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-6 items-start lg:gap-12 reveal">
+            <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center shrink-0 timeline-dot relative z-10 shadow-lg">
+              <span class="text-[9px] font-bold text-[#1C1C2E]">18</span>
+            </div>
+            <div class="lg:flex-1">
+              <p class="text-dsp-gold font-semibold mb-2">2017–2018</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Chapter of Excellence</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Collegiate Chapter (Region)</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Service (Region)</span>
+                <span class="text-xs px-3 py-1 rounded-full bg-dsp-gold/10 text-dsp-gold border border-dsp-gold/20">Outstanding Professional Activities (Region)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Individual Awards -->
+      <h3 class="font-display text-2xl font-bold text-dsp-text text-center mb-10 reveal">Brother Awards</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-cards" id="brother-awards-grid"></div>
+    </div>
+  </section>
+
+  </div><!-- /awards page -->
+
+  <!-- ======================== PHOTOS PAGE ======================== -->
+  <div class="page-content" data-page="photos">
+  <section id="photos" class="py-24 sm:py-32 bg-dsp-darker relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Memories</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Chapter Photos</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mt-6 mb-4"></div>
+      </div>
+      <!-- Photo Tabs -->
+      <div class="flex gap-2 justify-center mb-8">
+        <button class="photo-tab tab-btn active px-5 py-2 text-sm font-medium text-dsp-gold rounded-lg" data-tab="gallery">Gallery</button>
+        <button class="photo-tab tab-btn px-5 py-2 text-sm font-medium text-dsp-muted rounded-lg hover:text-dsp-gold" data-tab="families">Families</button>
+      </div>
+      <!-- Gallery Grid -->
+      <div id="photo-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(0)">
+          <img src="images/Website-Slideshow-500w.jpeg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(1)">
+          <img src="images/_DSC6220-500w.jpg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(2)">
+          <img src="images/IMG_1741-500w.jpg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(3)">
+          <img src="images/IMG_1537-500w.JPEG" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(4)">
+          <img src="images/Website-Slideshow3-500w.jpeg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(5)">
+          <img src="images/Website-Slideshow2-500w.jpeg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(6)">
+          <img src="images/768F2FA5-2F1A-4B5A-9277-7D409FF2C0DB-500w.jpeg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+        <div class="photo-item aspect-square cursor-pointer" onclick="openLightbox(7)">
+          <img src="images/IMG_0797-500w.jpg" alt="Chapter photo" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        </div>
+      </div>
+      <!-- Families Grid (hidden by default) -->
+      <div id="photo-families" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 hidden">
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="aspect-[4/3] overflow-hidden"><div class="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center"><span class="font-display text-4xl font-bold text-blue-700/80">Royal</span></div></div>
+          <div class="p-4 text-center"><p class="text-dsp-text font-semibold">Royal Family</p><p class="text-blue-700 text-xs mt-1 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 inline-block">Royal</p></div>
+        </div>
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="aspect-[4/3] overflow-hidden"><div class="w-full h-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center"><span class="font-display text-4xl font-bold text-emerald-700/80">Wanke</span></div></div>
+          <div class="p-4 text-center"><p class="text-dsp-text font-semibold">Wanke Family</p><p class="text-emerald-700 text-xs mt-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 inline-block">Wanke</p></div>
+        </div>
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="aspect-[4/3] overflow-hidden"><div class="w-full h-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center"><span class="font-display text-4xl font-bold text-red-700/80">DiGiorgio</span></div></div>
+          <div class="p-4 text-center"><p class="text-dsp-text font-semibold">DiGiorgio Family</p><p class="text-red-700 text-xs mt-1 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 inline-block">DiGiorgio</p></div>
+        </div>
+        <div class="glass-card rounded-2xl overflow-hidden card-hover group">
+          <div class="aspect-[4/3] overflow-hidden"><div class="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center"><span class="font-display text-4xl font-bold text-purple-700/80">Barnhardt</span></div></div>
+          <div class="p-4 text-center"><p class="text-dsp-text font-semibold">Barnhardt Family</p><p class="text-purple-700 text-xs mt-1 px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 inline-block">Barnhardt</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /photos page -->
+
+  <!-- ======================== ALUMNI PAGE ======================== -->
+  <div class="page-content" data-page="alumni">
+  <section id="alumni" class="py-24 sm:py-32 bg-dsp-dark relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+      <img src="images/Yoga-Banner-1500w.jpeg" alt="" class="w-full h-full object-cover" loading="lazy">
+    </div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <div class="reveal">
+        <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">For Life</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text mb-6">Alumni Network</h2>
+        <div class="w-20 h-0.5 gold-gradient mx-auto mb-8"></div>
+      </div>
+      <blockquote class="reveal">
+        <p class="font-display text-2xl sm:text-3xl lg:text-4xl text-dsp-text/90 italic leading-relaxed mb-8">"Delta Sigma Pi is not just four years, it's for life."</p>
+      </blockquote>
+      <p class="text-dsp-text/80 max-w-2xl mx-auto leading-relaxed mb-10 reveal">With over 1,000 alumni brothers, the Kappa Mu Chapter's network spans every corner of the business world. From networking opportunities and internships to job placements, our alumni provide mentorship and support long after graduation.</p>
+      <div class="flex justify-center gap-6 sm:gap-12 mb-12 reveal">
+        <div class="text-center">
+          <p class="text-3xl sm:text-4xl font-bold text-dsp-text counter" data-target="1000">0</p>
+          <p class="text-dsp-gold text-xs tracking-wider uppercase mt-1">Alumni Brothers</p>
+        </div>
+        <div class="w-px bg-dsp-gold/20"></div>
+        <div class="text-center">
+          <p class="text-3xl sm:text-4xl font-bold text-dsp-text">26+</p>
+          <p class="text-dsp-gold text-xs tracking-wider uppercase mt-1">Top Companies</p>
+        </div>
+        <div class="w-px bg-dsp-gold/20"></div>
+        <div class="text-center">
+          <p class="text-3xl sm:text-4xl font-bold text-dsp-text">44</p>
+          <p class="text-dsp-gold text-xs tracking-wider uppercase mt-1">Years Strong</p>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
+        <a href="https://www.deltasigmapi.org/foundation/donate" target="_blank" class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full gold-gradient text-[#1C1C2E] font-semibold text-sm hover:shadow-lg hover:shadow-dsp-gold/20 transition-all hover:scale-105">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+          Donate to Kappa Mu
+        </a>
+        <a href="mailto:carolynlidster@gmail.com" class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-dsp-gold/30 text-dsp-gold font-semibold text-sm hover:bg-dsp-gold/10 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /alumni page -->
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="py-16 bg-[#1C1C2E] border-t border-dsp-gold/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-12 mb-12">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <img src="images/WebsiteLogo-100w.png" alt="DSP" class="w-10 h-10 object-contain">
+            <div>
+              <p class="font-display text-lg font-bold text-white">Delta Sigma Pi</p>
+              <p class="text-dsp-gold text-xs tracking-wider">Kappa Mu Chapter</p>
+            </div>
+          </div>
+          <p class="text-[#9CA3AF] text-sm leading-relaxed">The foremost professional business fraternity at Cal Poly SLO. Building future business leaders since 1981.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="home">Home</a>
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="recruitment">Recruitment</a>
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="brothers">Brothers</a>
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="leadership">Leadership</a>
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="awards">Awards</a>
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="photos">Photos</a>
+            <a href="#" class="nav-link text-[#9CA3AF] text-sm hover:text-dsp-gold transition-colors" data-page="alumni">Alumni</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Connect</h4>
+          <div class="flex gap-3 mb-4">
+            <a href="https://www.instagram.com/calpolydeltasig/" target="_blank" class="w-10 h-10 rounded-full border border-dsp-gold/20 flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/cpdeltasigmapi" target="_blank" class="w-10 h-10 rounded-full border border-dsp-gold/20 flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="mailto:carolynlidster@gmail.com" class="w-10 h-10 rounded-full border border-dsp-gold/20 flex items-center justify-center text-dsp-gold hover:bg-dsp-gold hover:text-[#1C1C2E] transition-all">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            </a>
+          </div>
+          <p class="text-[#9CA3AF] text-sm">@calpolydeltasig</p>
+        </div>
+      </div>
+      <div class="border-t border-dsp-gold/10 pt-8 text-center">
+        <p class="text-[#9CA3AF] text-sm">&copy; 2025 Delta Sigma Pi &mdash; Kappa Mu Chapter. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full gold-gradient flex items-center justify-center shadow-lg z-40 opacity-0 translate-y-4 transition-all duration-300 hover:scale-110 cursor-pointer">
+    <svg class="w-5 h-5 text-[#1C1C2E]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+  </button>
+
+  <!-- ======================== LIGHTBOX MODAL ======================== -->
+  <div id="lightbox" class="fixed inset-0 z-[70] bg-black/95 hidden flex items-center justify-center" onclick="if(event.target===this)closeLightbox()">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <button onclick="lightboxPrev()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors z-10">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+    </button>
+    <button onclick="lightboxNext()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors z-10">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="Photo" class="max-w-[90vw] max-h-[85vh] object-contain rounded-lg">
+    <p id="lightbox-counter" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-sm"></p>
+  </div>
+
+<script>
+// ==================== DATA ====================
+const BROTHERS = {
+  'gamma-phi': [
+    { name: 'Kyle Brooks', major: 'Undecided', family: 'DiGiorgio', big: 'Hudson Lund', hometown: 'Corte Madera, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Wraye Cormany', major: 'Undecided', family: 'Wanke', big: 'Maggie Bobo', hometown: 'Austin, TX', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Madi Housholder', major: 'Finance', family: 'Royal', big: 'Zoe Lee', hometown: 'San Jose, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Keya Mehta', major: 'Undecided', family: 'Wanke', big: 'Remington Steels', hometown: 'Los Gatos, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Kaiden Campbell', major: 'Finance', family: 'Royal', big: 'Nicol Prentice', hometown: 'San Diego, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Marco De Benedetti', major: 'Undecided', family: 'Royal', big: 'Jenna Onestinghel', hometown: 'Belmont, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Naomi Lee', major: 'Undecided', family: 'Royal', big: 'Josh Palmateer', hometown: 'Walnut Creek, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Jack Rossmiller', major: 'Undecided', family: 'Royal', big: 'Miles Clarke', hometown: 'Roseville, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Max Chizzo', major: 'Undecided', family: 'DiGiorgio', big: 'Kennan Knowles', hometown: 'Agoura Hills, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Rob DuCote', major: 'Undecided', family: 'Barnhardt', big: 'Anthony Gomez', hometown: 'Half Moon Bay, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' },
+    { name: 'Joshua Linzay', major: 'Undecided', family: 'Barnhardt', big: 'Kyle Stefan', hometown: 'La Verne, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png' }
+  ],
+  'gamma-upsilon': [
+    { name: 'Luke Cole', major: 'Finance', family: 'Wanke', big: 'Steele Marshall', hometown: 'Thousand Oaks, CA', photo: 'images/IMG_2615-500w.jpg', linkedin: 'https://www.linkedin.com/in/luke-cole-b69234277/' },
+    { name: 'Nithya Madineni', major: 'Undecided', family: 'Wanke', big: 'Grace Frautschi', hometown: 'Livermore, CA', photo: 'images/IMG_2735-2-500w.jpg', linkedin: 'https://www.linkedin.com/in/nithya-madineni/' },
+    { name: 'Taylor Pagano', major: 'Undecided', family: 'DiGiorgio', big: 'Rio Imperato', hometown: 'Sacramento, CA', photo: 'images/IMG_2762-500w.jpg', linkedin: 'https://www.linkedin.com/in/taylorpagano05/' },
+    { name: 'Jenna De Jong', major: 'Undecided', family: 'Royal', big: 'Charlie Boarman', hometown: 'Long Beach, CA', photo: 'images/IMG_2812-500w.jpg', linkedin: 'https://www.linkedin.com/in/jenna-dejong10/' },
+    { name: 'Gael Morales', major: 'Undecided', family: 'Barnhardt', big: 'Ayden Morgan', hometown: 'Wilmette, IL', photo: 'images/IMG_2641-500w.jpg', linkedin: 'https://www.linkedin.com/in/gaelmorales2028/' },
+    { name: 'Solomon Perera', major: 'Finance', family: 'Wanke', big: 'Jeffery Utter', hometown: 'Snohomish, WA', photo: 'images/IMG_2684-500w.jpg', linkedin: 'https://www.linkedin.com/in/solomonperera/' },
+    { name: 'Apikaila Jeong', major: 'Finance', family: 'Wanke', big: 'Tyler Matlotsz', hometown: 'Oakley, CA', photo: 'images/IMG_2628-500w.jpg', linkedin: 'https://www.linkedin.com/in/apikaila-jeong-/' },
+    { name: 'Jenna Onestinghel', major: 'Accounting', family: 'Royal', big: 'John Slavin', hometown: 'Anaheim Hills, CA', photo: 'images/IMG_2677-500w.jpg', linkedin: 'https://www.linkedin.com/in/jenna-onestinghel/' },
+    { name: 'Chloe Shepherd', major: 'IS', family: 'Barnhardt', big: 'Yasna Mukundan', hometown: 'Woodinville, WA', photo: 'images/IMG_2713-500w.jpg', linkedin: 'https://www.linkedin.com/in/chloeshephrd28/' }
+  ],
+  'gamma-tau': [
+    { name: 'Maggie Bobo', major: 'Undecided', family: 'Wanke', big: 'Eleanor Octavio', hometown: 'San Clemente, CA', photo: 'images/IMG_9314-500w.jpg', linkedin: 'https://www.linkedin.com/in/margaret-bobo-397137332/' },
+    { name: 'Kennan Knowles', major: 'Finance', family: 'DiGiorgio', big: 'Thomas Ankenbrandt', hometown: 'Santa Cruz, CA', photo: 'images/IMG_9393-500w.jpg', linkedin: 'https://www.linkedin.com/in/knowleskennan/' },
+    { name: 'Steele Marshall', major: 'Undecided', family: 'Wanke', big: 'Aidan Fitch', hometown: 'Oceanside, CA', photo: 'images/IMG_9291-500w.jpg', linkedin: 'https://www.linkedin.com/in/steelemarshall/' },
+    { name: 'Nicol Prentice', major: 'Undecided', family: 'Royal', big: 'Cruz Landers', hometown: 'Santa Barbara, CA', photo: 'images/IMG_9421-500w.jpg', linkedin: 'https://www.linkedin.com/in/nic-prentice805/' },
+    { name: 'Ellery Seta', major: 'Undecided', family: 'Barnhardt', big: 'Sofia Maxfield', hometown: 'Los Angeles, CA', photo: 'images/IMG_9307-500w.jpg', linkedin: 'https://www.linkedin.com/in/elleryseta/' },
+    { name: 'Miles Clarke', major: 'Undecided', family: 'Royal', big: 'Stuart Soule', hometown: 'San Jose, CA', photo: 'images/IMG_9323-500w.jpg', linkedin: 'https://www.linkedin.com/in/milesclarke2/' },
+    { name: 'Zoe Lee', major: 'Undecided', family: 'Royal', big: 'Olivia Hernandez', hometown: 'Fremont, CA', photo: 'images/IMG_9285-500w.jpg', linkedin: 'https://www.linkedin.com/in/zoeytlee/' },
+    { name: 'Nathan Moore', major: 'Undecided', family: 'Wanke', big: 'Scott Betterly', hometown: 'Carlsbad, CA', photo: 'images/IMG_9356-500w.jpg', linkedin: 'https://www.linkedin.com/in/nathan-moore-4kw/' },
+    { name: 'Josh Palmateer', major: 'Undecided', family: 'Royal', big: 'Charlie Boarman', hometown: 'San Anselmo, CA', photo: 'images/IMG_9430-500w.jpg', linkedin: 'https://www.linkedin.com/in/joshpalmateer/' },
+    { name: 'Remington Steels', major: 'Undecided', family: 'Wanke', big: 'Katelyn Quon', hometown: 'Santa Maria, CA', photo: 'images/IMG_9342-500w.jpeg', linkedin: 'https://www.linkedin.com/in/remington-steels-7b8b77331/' },
+    { name: 'Anthony Gomez', major: 'Undecided', family: 'Barnhardt', big: 'Jacob Hernandez', hometown: 'Costa Mesa, CA', photo: 'images/IMG_9443-500w.jpg', linkedin: 'https://www.linkedin.com/in/anthony-gomez-697469307/' },
+    { name: 'Hudson Lund', major: 'Undecided', family: 'DiGiorgio', big: 'Niko Muller', hometown: 'Woodinville, WA', photo: 'images/IMG_9418-500w.jpg', linkedin: 'https://www.linkedin.com/in/hudson-lund/' },
+    { name: 'Gianna Murrell', major: 'Finance', family: 'Wanke', big: 'Dylan Marino', hometown: 'La Quinta, CA', photo: 'images/IMG_9359-500w.jpg', linkedin: 'https://www.linkedin.com/in/gianna-murrell-50a03a2a8/' },
+    { name: 'Sydnie Sanchez', major: 'Finance', family: 'DiGiorgio', big: 'Ava Schlegel', hometown: 'Fresno, CA', photo: 'images/IMG_9384-500w.jpg', linkedin: 'https://www.linkedin.com/in/sydnie-sanchez/' },
+    { name: 'Kyle Stefan', major: 'Undecided', family: 'Barnhardt', big: 'Itai Lavi', hometown: 'Los Gatos, CA', photo: 'images/IMG_9457-500w.jpg', linkedin: 'https://www.linkedin.com/in/kyle-stefan/' }
+  ],
+  'gamma-sigma': [
+    { name: 'Ben Binder', major: 'Accounting', family: 'Royal', big: 'Brian Friedman', hometown: 'Redwood City, CA', photo: 'images/IMG_0645-500w.jpg', linkedin: 'https://www.linkedin.com/in/ben-binder14/' },
+    { name: 'Charlie Boarman', major: 'Undecided', family: 'Royal', big: 'Alyssa Nguyen', hometown: 'San Diego, CA', photo: 'images/IMG_0797-500w.jpg', linkedin: 'https://www.linkedin.com/in/charlieboarman/' },
+    { name: 'Aidan Fitch', major: 'Undecided', family: 'Wanke', big: 'Leo Flesh', hometown: 'Santa Barbara, CA', photo: 'images/IMG_0834-500w.jpg', linkedin: 'https://www.linkedin.com/in/aidanfitch/' },
+    { name: 'Grace Frautschi', major: 'Undecided', family: 'Wanke', big: 'Alexia Gonzales', hometown: 'Los Angeles, CA', photo: 'images/IMG_0771-500w.jpg', linkedin: 'https://www.linkedin.com/in/grace-frautschi03/' },
+    { name: 'Rio Imperato', major: 'Undecided', family: 'DiGiorgio', big: 'Harper Lopiccolo', hometown: 'Maui, HI', photo: 'images/IMG_9411-500w.jpg', linkedin: 'https://www.linkedin.com/in/rio-imperato-7057142b1/' },
+    { name: 'Stuart Soule', major: 'Undecided', family: 'Royal', big: 'Max Wulff', hometown: 'Los Angeles, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png', linkedin: 'https://www.linkedin.com/in/stuart-soule-ab8383299/' },
+    { name: 'Katelyn Quon', major: 'IS', family: 'Wanke', big: 'Amanda Alcala', hometown: 'Pacifica, CA', photo: 'images/IMG_0723-500w.jpg', linkedin: 'https://www.linkedin.com/in/katelyn-quon/' },
+    { name: 'Jeff Utter', major: 'Undecided', family: 'Wanke', big: 'Tyler Hom', hometown: 'Bainbridge Island, WA', photo: 'images/IMG_0791-500w.jpg', linkedin: 'https://www.linkedin.com/in/jeff-utter/' },
+    { name: 'Ava Schlegel', major: 'Undecided', family: 'DiGiorgio', big: 'Karlie Koch', hometown: 'San Diego, CA', photo: 'images/IMG_0704-500w.jpg', linkedin: 'https://www.linkedin.com/in/ava-schlegel-b33b982a9/' },
+    { name: 'Tyler Matlotsz', major: 'Undecided', family: 'Wanke', big: 'Sophia Wong', hometown: 'El Segundo, CA', photo: 'images/1716325080.285797-500w.jpg', linkedin: 'https://www.linkedin.com/in/tylermatlosz/' }
+  ],
+  'gamma-rho': [
+    { name: 'Thomas Ankenbrandt', major: 'Undecided', family: 'DiGiorgio', big: 'Cameron Ralston', hometown: 'Los Gatos, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png', linkedin: 'https://www.linkedin.com/in/tommyankenbrandt/' },
+    { name: 'Olivia Hernandez', major: 'Undecided', family: 'Royal', big: 'Carolina Ingenito', hometown: 'Carlsbad, CA', photo: 'images/IMG_0777-500w.jpg', linkedin: 'https://www.linkedin.com/in/olivia-hernandez-22b6a0279/' },
+    { name: 'Itai Lavi', major: 'Finance', family: 'Barnhardt', big: 'Carelle Enrique', hometown: 'Cupertino, CA', photo: 'images/IMG_9467-500w.jpg', linkedin: 'https://www.linkedin.com/in/itai-lavi/' },
+    { name: 'Sofia Maxfield', major: 'Accounting', family: 'Barnhardt', big: 'Yasna Mukundan', hometown: 'Union City, CA', photo: 'images/IMG_0734-500w.jpg', linkedin: 'https://www.linkedin.com/in/sofiammaxfield/' },
+    { name: 'Eleanor Octavio', major: 'Finance', family: 'Wanke', big: 'Ash Pickett', hometown: 'Mill Valley, CA', photo: 'images/IMG_0830-500w.jpg', linkedin: 'https://www.linkedin.com/in/eleanor-octavio/' },
+    { name: 'Scott Betterly', major: 'Undecided', family: 'Wanke', big: 'Jacob Morgan', hometown: 'San Diego, CA', photo: 'images/IMG_0809-500w.jpg', linkedin: 'https://www.linkedin.com/in/sbetterly/' },
+    { name: 'Harper Lopiccolo', major: 'Accounting', family: 'DiGiorgio', big: 'Danny Davis', hometown: 'Reno, NV', photo: 'images/IMG_0752-500w.jpg', linkedin: 'https://www.linkedin.com/in/harperlopiccolo/' },
+    { name: 'Ayden Morgan', major: 'Finance', family: 'Barnhardt', big: 'Scott Marcus', hometown: 'Davis, CA', photo: 'images/IMG_0744-500w.jpg', linkedin: 'https://www.linkedin.com/in/aydenmorgan/' },
+    { name: 'John Slavin', major: 'Finance', family: 'Royal', big: 'Sasha Kramnik', hometown: 'Seattle, WA', photo: 'images/IMG_0689-500w.jpg', linkedin: 'https://www.linkedin.com/in/johnhslavin/' },
+    { name: 'Max Wulff', major: 'Finance', family: 'Royal', big: 'Jacob Hall', hometown: 'Arroyo Grande, CA', photo: 'images/IMG_0782-500w.jpg', linkedin: 'https://www.linkedin.com/in/maxwulff/' },
+    { name: 'Leo Flesh', major: 'Quant', family: 'Wanke', big: 'Daniel Valentine', hometown: 'Bend, OR', photo: 'images/IMG_0768-500w.jpg', linkedin: 'https://www.linkedin.com/in/leoflesh/' },
+    { name: 'Cruz Landers', major: 'Undecided', family: 'Royal', big: 'Lily Aubin', hometown: 'Arroyo Grande, CA', photo: 'images/IMG_0787-500w.jpg', linkedin: 'https://www.linkedin.com/in/cruz-landers-55a577294/' },
+    { name: 'Dylan Marino', major: 'Undecided', family: 'Wanke', big: 'Katie Fricks', hometown: 'Elk Grove, CA', photo: 'images/IMG_0647-500w.jpg', linkedin: 'https://www.linkedin.com/in/dylan-marino/' },
+    { name: 'Niko Muller', major: 'Finance', family: 'DiGiorgio', big: 'Wolfgang Weiss', hometown: 'Mountain View, CA', photo: 'images/IMG_0752-500w.jpg', linkedin: 'https://www.linkedin.com/in/nikopmuller/' }
+  ],
+  'gamma-pi': [
+    { name: 'Alexia Gonzales', major: 'Entrepreneurship', family: 'Wanke', big: 'Kajal Gogri', hometown: 'San Diego, CA', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png', linkedin: 'https://www.linkedin.com/in/alexiatgonzales/' },
+    { name: 'Tyler Hom', major: 'Finance', family: 'Wanke', big: 'Emma Cosma', hometown: 'Sacramento, CA', photo: 'images/IMG_0814-500w.jpg', linkedin: 'https://www.linkedin.com/in/tylerhom123/' },
+    { name: 'Karlie Koch', major: 'Finance', family: 'DiGiorgio', big: 'Yash Gill', hometown: 'Roseville, CA', photo: 'images/_DSF7087-500w.jpg', linkedin: 'https://www.linkedin.com/in/karlie-koch/' },
+    { name: 'Alyssa Nguyen', major: 'Finance', family: 'Royal', big: 'Jaden Lipson', hometown: 'Los Angeles, CA', photo: 'images/IMG_0709-500w.jpg', linkedin: 'https://www.linkedin.com/in/alyssa-nguyen-5322b9264/' },
+    { name: 'Cameron Ralston', major: 'Finance', family: 'DiGiorgio', big: 'Brandon Williams', hometown: 'San Jose, CA', photo: 'images/Artboard-1-500w.jpg', linkedin: 'https://www.linkedin.com/in/camralston/' }
+  ],
+  'gamma-omicron': [
+    { name: 'Lily Aubin', major: 'Marketing', family: 'Royal', big: 'Madeleine Heli', hometown: 'El Dorado Hills, CA', photo: 'images/unnamed-500w.jpg', linkedin: 'https://www.linkedin.com/in/lily-aubin-58607a20b/' },
+    { name: 'Carelle Enrique', major: 'Accounting', family: 'Barnhardt', big: 'Ellie Delurgio', hometown: 'Los Angeles, CA', photo: 'images/90E8042F-52DF-484C-9705-DBD3FFDE890D-23561-00000371BD8810D3-500w.jpg', linkedin: 'https://www.linkedin.com/in/carelle-enrique/' },
+    { name: 'Carolina Ingenito', major: 'Finance', family: 'Royal', big: 'Nate Winiecki', hometown: 'Sacramento', photo: 'images/IMG_3354-500w.jpg', linkedin: 'https://www.linkedin.com/in/carolina-ingenito-401514253/' },
+    { name: 'Sasha Kramnik', major: 'Marketing', family: 'Royal', big: 'Max Choate', hometown: 'Agoura Hills, CA', photo: 'images/IMG_0827-500w.jpg', linkedin: 'https://www.linkedin.com/in/sashakramnik/' },
+    { name: 'Jacob Morgan', major: 'Accounting', family: 'Wanke', big: 'Josh Lavin', hometown: 'Sammamish, WA', photo: 'images/Deltasig-headshot-500w.jpg', linkedin: 'https://www.linkedin.com/in/jacob-p-morgan/' },
+    { name: 'Yasna Mukundan', major: 'Finance', family: 'Barnhardt', big: 'Krista McCollough', hometown: 'Sacramento, CA', photo: 'images/IMG_9437-500w.jpg', linkedin: 'https://www.linkedin.com/in/yasna-mukundan/' },
+    { name: 'Ash Pickett', major: 'HR/Management', family: 'Wanke', big: 'Maya Thoma', hometown: 'Fremont, CA', photo: 'images/IMG_8787-500w.jpg', linkedin: 'https://www.linkedin.com/in/ash-pickett/' }
+  ]
+};
+
+const BROTHER_AWARDS = [
+  { name: 'Delta Award', current: 'Itai Lavi', past: 'Katie Fricks' },
+  { name: 'Pi Award', current: 'Katie Fricks', past: 'Cierra Arlow' },
+  { name: 'Chris Meadows Award', desc: 'Passion in Non-Fraternal & Fraternal Activities', current: 'Leo Flesh', past: 'Maria Kavathas' },
+  { name: "President's Award", desc: 'Hardwork and Dedication to the Chapter', current: 'Olivia Hernandez', past: 'Sasha Kramnik' },
+  { name: 'Golden Rose Society', desc: 'Highest Involvement & Attendance', current: 'Charlie Boarman', past: 'Yasna Mukundan' },
+  { name: 'Brother of the Year', desc: 'Contributed to Kappa Mu Most over the Past Year', current: 'Brandon Williams', past: 'Jake Hall' },
+  { name: 'Sigma Award', current: 'Brian Friedman', past: 'Brian Friedman' },
+  { name: 'Lola Ada Award', desc: 'Most Inspirational', current: 'Madeleine Heli', past: 'Josh Lavin' },
+  { name: 'Faculty Brother Award', desc: 'Best Balance of Fraternal & Educational Responsibilities', current: 'Scott Betterly', past: 'Carelle Enrique' },
+  { name: 'Collegian of the Year', desc: 'Exemplifies Values and Ideals of the Fraternity', current: 'Scott Betterly', past: 'Madeleine Heli' },
+  { name: 'Lifetime Achievement Award', desc: 'Contributed to Kappa Mu Most over all Years Involved', current: 'Jacob Hall', past: 'Cole DiMaggio' }
+];
+
+const FAMILY_COLORS = {
+  'Royal': { bg: 'bg-dsp-gold/10', text: 'text-dsp-gold', border: 'border-dsp-gold/20' },
+  'Wanke': { bg: 'bg-dsp-gold/10', text: 'text-dsp-gold', border: 'border-dsp-gold/20' },
+  'DiGiorgio': { bg: 'bg-dsp-gold/10', text: 'text-dsp-gold', border: 'border-dsp-gold/20' },
+  'Barnhardt': { bg: 'bg-dsp-gold/10', text: 'text-dsp-gold', border: 'border-dsp-gold/20' }
+};
+
+const GALLERY_IMAGES = [
+  'images/Website-Slideshow-1500w.jpeg',
+  'images/_DSC6220-1500w.jpg',
+  'images/IMG_1741-1500w.jpg',
+  'images/IMG_1537-1500w.JPEG',
+  'images/Website-Slideshow3-1500w.jpeg',
+  'images/Website-Slideshow2-1500w.jpeg',
+  'images/768F2FA5-2F1A-4B5A-9277-7D409FF2C0DB-1500w.jpeg',
+  'images/IMG_0797-1500w.jpg'
+];
+
+// ==================== LOADING ====================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading-overlay').classList.add('hidden');
+  }, 1200);
+});
+
+// ==================== NAVBAR ====================
+const navbar = document.getElementById('navbar');
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+let menuOpen = false;
+let currentPage = 'home';
+
+// Navbar glass on scroll (only on home page with hero)
+window.addEventListener('scroll', () => {
+  if (currentPage === 'home') {
+    if (window.scrollY > 80) {
+      navbar.classList.add('glass');
+      navbar.classList.remove('navbar-hero');
+    } else {
+      navbar.classList.remove('glass');
+      navbar.classList.add('navbar-hero');
+    }
+    // Cinematic hero fade on scroll
+    const heroSection = document.getElementById('home');
+    const heroTextEl = heroSection ? heroSection.querySelector('.hero-text-container') : null;
+    const heroBgEl = document.getElementById('hero-bg');
+    if (heroSection && heroTextEl) {
+      const heroH = heroSection.offsetHeight;
+      const progress = Math.min(window.scrollY / heroH, 1);
+      heroTextEl.style.opacity = Math.max(1 - progress * 1.8, 0);
+      if (heroBgEl) {
+        const isMobile = window.innerWidth < 768;
+        const parallax = isMobile ? window.scrollY * 0.15 : window.scrollY * 0.3;
+        heroBgEl.style.filter = `blur(${progress * 5}px)`;
+        heroBgEl.style.transform = `translateY(${parallax}px)`;
+      }
+    }
+  }
+  // Back to top
+  const btn = document.getElementById('back-to-top');
+  if (window.scrollY > 500) {
+    btn.style.opacity = '1';
+    btn.style.transform = 'translateY(0)';
+  } else {
+    btn.style.opacity = '0';
+    btn.style.transform = 'translateY(16px)';
+  }
+});
+
+hamburger.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  const spans = hamburger.querySelectorAll('span');
+  if (menuOpen) {
+    mobileMenu.style.opacity = '1';
+    mobileMenu.style.pointerEvents = 'auto';
+    spans[0].style.transform = 'rotate(45deg) translateY(6px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translateY(-6px)';
+    document.body.style.overflow = 'hidden';
+  } else {
+    mobileMenu.style.opacity = '0';
+    mobileMenu.style.pointerEvents = 'none';
+    spans[0].style.transform = '';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = '';
+    document.body.style.overflow = '';
+  }
+});
+
+// Close mobile menu on nav click
+document.querySelectorAll('.mobile-nav').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    menuOpen = false;
+    mobileMenu.style.opacity = '0';
+    mobileMenu.style.pointerEvents = 'none';
+    hamburger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = '1'; });
+    document.body.style.overflow = '';
+    const page = link.dataset.page;
+    if (page) showPage(page);
+  });
+});
+
+// ==================== PAGE NAVIGATION ====================
+function showPage(pageName) {
+  // Legacy redirect: about was merged into home
+  if (pageName === 'about') pageName = 'home';
+  currentPage = pageName;
+  // Hide all pages, show target
+  document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+  const target = document.querySelector(`.page-content[data-page="${pageName}"]`);
+  if (target) target.classList.add('active');
+
+  // Update active nav links
+  document.querySelectorAll('.nav-link.tab-btn').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll(`.nav-link.tab-btn[data-page="${pageName}"]`).forEach(l => l.classList.add('active'));
+
+  // Scroll to top and force scroll handler to update hero opacity
+  window.scrollTo(0, 0);
+  window.dispatchEvent(new Event('scroll'));
+
+  // Navbar glass logic
+  if (pageName === 'home') {
+    navbar.classList.remove('glass');
+    navbar.classList.add('navbar-hero');
+    hamburger.querySelectorAll('span').forEach(s => { s.classList.remove('bg-dsp-text'); s.classList.add('bg-white'); });
+    // Ensure hero text is visible at scroll position 0
+    const heroText = document.querySelector('.hero-text-container');
+    if (heroText) heroText.style.opacity = '1';
+  } else {
+    navbar.classList.add('glass');
+    navbar.classList.remove('navbar-hero');
+    hamburger.querySelectorAll('span').forEach(s => { s.classList.remove('bg-white'); s.classList.add('bg-dsp-text'); });
+  }
+
+  // Trigger entrance animations
+  triggerPageAnimations(pageName);
+
+  // Update URL hash
+  history.pushState(null, '', '#' + pageName);
+}
+
+// Click handler for all nav links with data-page
+document.querySelectorAll('.nav-link[data-page]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const page = link.dataset.page;
+    if (page) showPage(page);
+  });
+});
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Handle browser back/forward
+window.addEventListener('popstate', () => {
+  const hash = window.location.hash.replace('#', '') || 'home';
+  showPage(hash);
+});
+
+// ==================== GSAP ANIMATIONS ====================
+
+// ---- 1. SPLIT TITLE INTO INDIVIDUAL LETTER SPANS ----
+(function() {
+  const title = document.getElementById('hero-title');
+  if (!title) return;
+  const text = title.textContent;
+  title.innerHTML = '';
+  for (let i = 0; i < text.length; i++) {
+    const span = document.createElement('span');
+    span.className = 'hero-letter';
+    span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+    title.appendChild(span);
+  }
+})();
+
+// ---- 2. CURSOR TRAIL EFFECT ----
+(function() {
+  const hero = document.getElementById('home');
+  const trailContainer = document.getElementById('hero-trail');
+  if (!hero || !trailContainer || window.innerWidth < 768) return;
+  const TRAIL_LENGTH = 8;
+  const trail = [];
+
+  for (let i = 0; i < TRAIL_LENGTH; i++) {
+    const dot = document.createElement('div');
+    const size = 4 - i * 0.4;
+    dot.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:rgba(207,181,59,${0.5 - i * 0.055});pointer-events:none;opacity:0;transition:left ${0.08 + i * 0.035}s ease-out, top ${0.08 + i * 0.035}s ease-out;`;
+    trailContainer.appendChild(dot);
+    trail.push(dot);
+  }
+
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    trail.forEach(dot => {
+      dot.style.opacity = '1';
+      dot.style.left = x + 'px';
+      dot.style.top = y + 'px';
+    });
+  });
+  hero.addEventListener('mouseleave', () => {
+    trail.forEach(dot => dot.style.opacity = '0');
+  });
+})();
+
+// ---- 2b. PILLAR WORD RIPPLE ON CLICK ----
+(function() {
+  document.querySelectorAll('.pillar-word').forEach(word => {
+    word.style.cursor = 'pointer';
+    word.addEventListener('click', (e) => {
+      const ripple = document.createElement('div');
+      ripple.className = 'pillar-ripple';
+      ripple.style.left = '50%';
+      ripple.style.top = '50%';
+      word.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+  });
+})();
+
+// ---- 3. ENHANCED PARALLAX + 3D TILT + MAGNETIC LETTERS + CURSOR GLOW ----
+(function() {
+  const hero = document.getElementById('home');
+  const heroBg = document.getElementById('hero-bg');
+  const heroGlow = document.getElementById('hero-glow');
+  const heroText = hero ? hero.querySelector('.hero-text-container') : null;
+  const letters = document.querySelectorAll('.hero-letter');
+  if (!hero || !heroBg) return;
+
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    const x = cx / rect.width - 0.5;
+    const y = cy / rect.height - 0.5;
+
+    // Background: deep parallax (translate only, img already scaled by GSAP)
+    heroBg.style.transform = `translate(${-x * 30}px, ${-y * 20}px)`;
+
+    // Text container: 3D tilt + translate
+    if (heroText) {
+      heroText.style.transform = `translate(${x * 10}px, ${y * 8}px) rotateY(${x * 4}deg) rotateX(${-y * 3}deg)`;
+    }
+
+    // Cursor glow
+    if (heroGlow) {
+      heroGlow.style.opacity = '1';
+      heroGlow.style.background = `radial-gradient(800px circle at ${cx}px ${cy}px, rgba(207,181,59,0.08), transparent 70%)`;
+    }
+
+    // Magnetic letter repulsion
+    letters.forEach(letter => {
+      const lr = letter.getBoundingClientRect();
+      const lx = lr.left + lr.width / 2 - rect.left;
+      const ly = lr.top + lr.height / 2 - rect.top;
+      const dx = lx - cx, dy = ly - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 200 && dist > 0) {
+        const force = (200 - dist) / 200 * 10;
+        letter.style.transform = `translate(${(dx / dist) * force}px, ${(dy / dist) * force}px)`;
+      } else {
+        letter.style.transform = '';
+      }
+    });
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    heroBg.style.transform = '';
+    if (heroText) heroText.style.transform = '';
+    if (heroGlow) heroGlow.style.opacity = '0';
+    letters.forEach(l => l.style.transform = '');
+  });
+})();
+
+// ---- 4. CINEMATIC ENTRANCE TIMELINE ----
+(function() {
+  const tl = gsap.timeline({ delay: 1.2 });
+
+  // Background zoom + unblur
+  tl.to('#hero-bg img', { scale: 1.15, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' })
+    // Top accent line
+    .to('.hero-line:first-of-type', { opacity: 1, duration: 0.01 }, '-=0.8')
+    .to('.hero-line:first-of-type line', { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut' }, '-=0.8')
+    // Title letters stagger
+    .fromTo('.hero-letter',
+      { y: 60, opacity: 0, rotateX: -40 },
+      { y: 0, opacity: 1, rotateX: 0, stagger: 0.03, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.7')
+    // Subtitle
+    .to('#hero-subtitle', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+    // Pillar words
+    .fromTo('.pillar-word',
+      { scale: 0.8, opacity: 0 },
+      { scale: 1, opacity: 1, stagger: 0.15, duration: 0.5, ease: 'back.out(1.2)' }, '-=0.2')
+    // Dots between pillars
+    .fromTo('.hero-dot',
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, stagger: 0.1, duration: 0.3 }, '-=0.4')
+    // Bottom accent line
+    .to('.hero-line:last-of-type', { opacity: 1, duration: 0.01 }, '-=0.1')
+    .to('.hero-line:last-of-type line', { strokeDashoffset: 0, duration: 1, ease: 'power2.inOut' }, '-=0.1')
+    // EST date
+    .to('#hero-est', { opacity: 1, y: 0, duration: 0.5 }, '-=0.5')
+    // Scroll arrow
+    .to('.hero-scroll-arrow', { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+    // Add typing cursor after subtitle
+    .call(() => {
+      const sub = document.getElementById('hero-subtitle');
+      if (sub && !sub.querySelector('.typing-cursor')) {
+        const cursor = document.createElement('span');
+        cursor.className = 'typing-cursor';
+        sub.appendChild(cursor);
+        setTimeout(() => { cursor.style.transition = 'opacity 0.5s'; cursor.style.opacity = '0'; setTimeout(() => cursor.remove(), 600); }, 2500);
+      }
+    }, null, '-=0.8');
+})();
+
+// Counter IntersectionObserver — triggers when stats section scrolls into view
+(function() {
+  const statsSection = document.getElementById('stats');
+  if (!statsSection) return;
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        triggerCounters();
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  statsObserver.observe(statsSection);
+})();
+
+// Entrance animations triggered on page show
+function triggerPageAnimations(pageName) {
+  const page = document.querySelector(`.page-content[data-page="${pageName}"]`);
+  if (!page) return;
+
+  // Animate .reveal elements
+  page.querySelectorAll('.reveal').forEach((el, i) => {
+    gsap.fromTo(el,
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out', delay: i * 0.1 }
+    );
+  });
+
+  // Animate stagger-cards
+  page.querySelectorAll('.stagger-cards').forEach(container => {
+    const cards = container.children;
+    if (!cards.length) return;
+    gsap.fromTo(cards,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.08, duration: 0.5, ease: 'power2.out', delay: 0.2 }
+    );
+  });
+}
+
+// ==================== COUNTERS ====================
+function triggerCounters() {
+  document.querySelectorAll('.counter').forEach(el => {
+    if (el.dataset.counted) return;
+    el.dataset.counted = 'true';
+    const target = parseInt(el.dataset.target);
+    const duration = 2000;
+    const startTime = performance.now();
+    const update = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString() + '+';
+      if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  });
+}
+
+// ==================== SLIDESHOW ====================
+let slideshowIndex = 0;
+const slideshowImgs = document.querySelectorAll('.slideshow-img');
+const slideshowDots = document.querySelectorAll('.slideshow-dot');
+
+function showSlide(index) {
+  slideshowImgs.forEach((img, i) => { img.style.opacity = i === index ? '1' : '0'; });
+  slideshowDots.forEach((dot, i) => { dot.classList.toggle('bg-white/80', i === index); dot.classList.toggle('bg-white/30', i !== index); });
+  slideshowIndex = index;
+}
+slideshowDots.forEach(dot => dot.addEventListener('click', () => showSlide(parseInt(dot.dataset.index))));
+setInterval(() => showSlide((slideshowIndex + 1) % slideshowImgs.length), 5000);
+
+// ==================== TESTIMONIAL CAROUSEL ====================
+let carouselIndex = 0;
+const track = document.getElementById('carousel-track');
+const totalSlides = 6;
+const carouselDots = document.querySelectorAll('.carousel-dot');
+let autoplay;
+
+function goToSlide(index) {
+  carouselIndex = index;
+  track.style.transform = `translateX(-${index * 100}%)`;
+  carouselDots.forEach((dot, i) => {
+    dot.classList.toggle('bg-dsp-gold', i === index);
+    dot.classList.toggle('bg-dsp-muted/30', i !== index);
+  });
+}
+
+document.getElementById('carousel-prev').addEventListener('click', () => {
+  goToSlide((carouselIndex - 1 + totalSlides) % totalSlides);
+  resetAutoplay();
+});
+document.getElementById('carousel-next').addEventListener('click', () => {
+  goToSlide((carouselIndex + 1) % totalSlides);
+  resetAutoplay();
+});
+carouselDots.forEach(dot => dot.addEventListener('click', () => { goToSlide(parseInt(dot.dataset.index)); resetAutoplay(); }));
+
+function startAutoplay() { autoplay = setInterval(() => goToSlide((carouselIndex + 1) % totalSlides), 5000); }
+function resetAutoplay() { clearInterval(autoplay); startAutoplay(); }
+startAutoplay();
+
+// Touch/swipe support
+let touchStartX = 0;
+track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; clearInterval(autoplay); }, { passive: true });
+track.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) { diff > 0 ? goToSlide((carouselIndex + 1) % totalSlides) : goToSlide((carouselIndex - 1 + totalSlides) % totalSlides); }
+  startAutoplay();
+}, { passive: true });
+
+// ==================== BROTHERS — CONTINUOUS SCROLL ====================
+const CLASS_ORDER = [
+  { key: 'gamma-omicron', label: '\u0393\u039F — Gamma Omicron', season: "Fall '22" },
+  { key: 'gamma-pi', label: '\u0393\u03A0 — Gamma Pi', season: "Winter '23" },
+  { key: 'gamma-rho', label: '\u0393\u03A1 — Gamma Rho', season: "Fall '23" },
+  { key: 'gamma-sigma', label: '\u0393\u03A3 — Gamma Sigma', season: "Winter '24" },
+  { key: 'gamma-tau', label: '\u0393\u03A4 — Gamma Tau', season: "Fall '24" },
+  { key: 'gamma-upsilon', label: '\u0393\u03A5 — Gamma Upsilon', season: "Winter '25" },
+  { key: 'gamma-phi', label: '\u0393\u03A6 — Gamma Phi', season: "Fall '25" }
+];
+
+function getInitials(name) {
+  return name.split(' ').map(n => n[0]).join('').substring(0, 2);
+}
+
+function renderAllBrothers() {
+  const container = document.getElementById('brothers-scroll');
+  if (!container) return;
+  container.innerHTML = '';
+  let cardIndex = 0;
+
+  CLASS_ORDER.forEach((cls, classIdx) => {
+    const brothers = BROTHERS[cls.key] || [];
+    // Class header spanning full grid width
+    const header = document.createElement('div');
+    header.className = 'col-span-full flex items-center gap-4 ' + (classIdx === 0 ? 'pt-0 pb-4' : 'pt-12 pb-4');
+    header.innerHTML = `
+      <div>
+        <h3 class="font-display text-xl sm:text-2xl text-dsp-text font-semibold">${cls.label}</h3>
+        <p class="text-dsp-muted text-xs mt-1">${cls.season} &middot; ${brothers.length} brothers</p>
+      </div>
+      <div class="flex-1 h-px bg-gradient-to-r from-dsp-gold/20 to-transparent"></div>
+    `;
+    container.appendChild(header);
+
+    brothers.forEach((b) => {
+      const fc = FAMILY_COLORS[b.family] || { bg: 'bg-gray-500/15', text: 'text-gray-300', border: 'border-gray-500/25' };
+      const card = document.createElement('div');
+      card.className = 'brother-card glass-card rounded-xl overflow-hidden' + (b.linkedin ? ' cursor-pointer' : ' cursor-default');
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(40px)';
+      card.dataset.cardIndex = cardIndex++;
+      if (b.linkedin) {
+        card.addEventListener('click', () => window.open(b.linkedin, '_blank'));
+      }
+
+      const linkedinIcon = b.linkedin ? `<span class="text-dsp-gold/40 group-hover:text-dsp-gold transition-colors" title="LinkedIn"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>` : '';
+
+      card.innerHTML = `
+        <div class="card-glow"></div>
+        <div class="relative h-52 bg-gray-100 overflow-hidden">
+          <img src="${b.photo}" alt="${b.name}" class="brother-photo w-full h-full object-cover object-top" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="w-full h-full items-center justify-center bg-gradient-to-br from-dsp-gold/10 to-dsp-gold/5 hidden absolute inset-0"><span class="text-3xl font-bold gold-text">${getInitials(b.name)}</span></div>
+        </div>
+        <div class="p-4 relative z-[11]">
+          <div class="flex items-center justify-between mb-1">
+            <p class="text-dsp-text font-semibold text-sm">${b.name}</p>
+            ${linkedinIcon}
+          </div>
+          <p class="text-dsp-muted text-xs mb-2">${b.major}</p>
+          <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="text-[10px] px-2 py-0.5 rounded-full ${fc.bg} ${fc.text} border ${fc.border}">${b.family}</span>
+          </div>
+          <p class="text-dsp-muted text-xs"><span class="text-dsp-gold/60">Big:</span> ${b.big}</p>
+          <p class="text-dsp-muted text-xs"><span class="text-dsp-gold/60">From:</span> ${b.hometown}</p>
+        </div>
+      `;
+      container.appendChild(card);
+
+      // 3D tilt + cursor glow on mousemove
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 6}deg) translateY(-10px) scale(1.03)`;
+        card.style.boxShadow = `0 25px 60px rgba(0,0,0,0.12), 0 0 40px rgba(207,181,59,0.1)`;
+        card.style.borderColor = 'rgba(207,181,59,0.35)';
+        const glow = card.querySelector('.card-glow');
+        if (glow) {
+          glow.style.background = `radial-gradient(600px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(207,181,59,0.08), transparent 60%)`;
+        }
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0) scale(1)';
+        card.style.boxShadow = '';
+        card.style.borderColor = '';
+      });
+    });
+  });
+
+  // Scroll-triggered entrance animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const delay = (parseInt(card.dataset.cardIndex) % 4) * 80;
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, delay);
+        observer.unobserve(card);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  container.querySelectorAll('.brother-card').forEach(card => observer.observe(card));
+}
+
+renderAllBrothers();
+
+// ==================== LEADERSHIP — CONTINUOUS SCROLL ====================
+const LEADERSHIP = {
+  'Executive Committee': [
+    { name: 'Charlie Boarman', role: 'President', photo: 'images/IMG_0797-500w.jpg', linkedin: 'https://www.linkedin.com/in/charlieboarman/' },
+    { name: 'Sasha Kramnik', role: 'Senior Vice President', photo: 'images/IMG_0827-500w.jpg', linkedin: 'https://www.linkedin.com/in/sashakramnik/' },
+    { name: 'Thomas Ankenbrandt', role: 'VP Pledge Education', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png', linkedin: 'https://www.linkedin.com/in/tommyankenbrandt/' },
+    { name: 'Hudson Lund', role: 'VP Scholarship & Awards', photo: 'images/IMG_9418-500w.jpg', linkedin: 'https://www.linkedin.com/in/hudson-lund/' },
+    { name: 'Grace Frautschi', role: 'VP Finance', photo: 'images/IMG_0771-500w.jpg', linkedin: 'https://www.linkedin.com/in/grace-frautschi03/' },
+    { name: 'Jacob Morgan', role: 'VP Chapter Operations', photo: 'images/Deltasig-headshot-500w.jpg', linkedin: 'https://www.linkedin.com/in/jacob-p-morgan/' },
+    { name: 'Carelle Enrique', role: 'Chancellor', photo: 'images/90E8042F-52DF-484C-9705-DBD3FFDE890D-23561-00000371BD8810D3-500w.jpg', linkedin: 'https://www.linkedin.com/in/carelle-enrique/' },
+    { name: 'Aidan Fitch', role: 'VP Community Service', photo: 'images/IMG_0834-500w.jpg', linkedin: 'https://www.linkedin.com/in/aidanfitch/' },
+    { name: 'Nithya Madineni', role: 'VP Professional Activities', photo: 'images/IMG_2735-2-500w.jpg', linkedin: 'https://www.linkedin.com/in/nithya-madineni/' },
+    { name: 'Remington Steels', role: 'VP Diversity, Equity & Inclusion', photo: 'images/IMG_9342-500w.jpeg', linkedin: 'https://www.linkedin.com/in/remington-steels-7b8b77331/' },
+    { name: 'Cameron Ralston', role: 'VP Brotherhood', photo: 'images/Screenshot-2024-05-19-at-7.56.08-PM-500w.png', linkedin: 'https://www.linkedin.com/in/camralston/' },
+    { name: 'Kyle Stefan', role: 'VP Alumni Relations', photo: 'images/IMG_9457-500w.jpg', linkedin: 'https://www.linkedin.com/in/kyle-stefan/' }
+  ],
+  'Committee Chairs': [
+    { name: 'Ayden Morgan', role: 'Webmaster', photo: 'images/IMG_0744-500w.jpg', linkedin: 'https://www.linkedin.com/in/aydenmorgan/' },
+    { name: 'Gianna Murrell', role: 'Fundraising Chair', photo: 'images/IMG_9359-500w.jpg', linkedin: 'https://www.linkedin.com/in/gianna-murrell-50a03a2a8/' },
+    { name: 'Karlie Koch', role: 'Risk Management Chair', photo: 'images/_DSF7087-500w.jpg', linkedin: 'https://www.linkedin.com/in/karlie-koch/' },
+    { name: 'Maggie Bobo', role: 'Historian', photo: 'images/IMG_9314-500w.jpg', linkedin: 'https://www.linkedin.com/in/margaret-bobo-397137332/' },
+    { name: 'Leo Flesh', role: 'Standards Chair', photo: 'images/IMG_0768-500w.jpg', linkedin: 'https://www.linkedin.com/in/leoflesh/' }
+  ],
+  'Faculty Advisor': [
+    { name: 'Sharon Dobson', role: 'Faculty Advisor', subtitle: 'Marketing & Finance · Alpha Phi' }
+  ],
+  'Active Faculty': [
+    { name: 'Dr. Norm Borin', role: 'Marketing', subtitle: 'Alpha Epsilon' },
+    { name: 'Chris Carr', role: 'Accounting & Law', subtitle: 'Alpha Iota' },
+    { name: 'Dr. Doug Cerf', role: 'Accounting', subtitle: 'Alpha Zeta' },
+    { name: 'Dr. Larry Gorman', role: 'Finance', subtitle: 'Alpha Lambda' },
+    { name: 'Dr. Lynn Metcalf', role: 'Entrepreneurship', subtitle: 'Kappa' },
+    { name: 'Dr. Stern Neill', role: 'Marketing', subtitle: 'Beta Xi' },
+    { name: 'Calvin Stevens', role: 'Management & HR', subtitle: 'Gamma Eta' },
+    { name: 'Dr. J Scott Vernon', role: 'Agribusiness', subtitle: 'Alpha Delta' }
+  ],
+  'Retired Faculty': [
+    { name: 'Michelle Bissonnette', role: 'Accounting', subtitle: 'Beta Gamma' },
+    { name: 'Lee Burgunder', role: 'Accounting & Law', subtitle: 'Epsilon' },
+    { name: 'Dr. Barry Floyd', role: 'Information Systems', subtitle: 'Tau' },
+    { name: 'Dr. Tad Miller', role: 'Accounting', subtitle: 'Alpha Omega' }
+  ]
+};
+
+function renderAllLeadership() {
+  const container = document.getElementById('leadership-scroll');
+  if (!container) return;
+  container.innerHTML = '';
+  let cardIdx = 0;
+  const sections = ['Executive Committee', 'Committee Chairs', 'Faculty Advisor', 'Active Faculty', 'Retired Faculty'];
+
+  sections.forEach((section, sIdx) => {
+    const members = LEADERSHIP[section] || [];
+    const header = document.createElement('div');
+    header.className = 'col-span-full flex items-center gap-4 ' + (sIdx === 0 ? 'pt-0 pb-4' : 'pt-12 pb-4');
+    header.innerHTML = `
+      <div>
+        <h3 class="font-display text-xl sm:text-2xl text-dsp-text font-semibold">${section}</h3>
+        <p class="text-dsp-muted text-xs mt-1">${members.length} ${members.length === 1 ? 'member' : 'members'}</p>
+      </div>
+      <div class="flex-1 h-px bg-gradient-to-r from-dsp-gold/20 to-transparent"></div>
+    `;
+    container.appendChild(header);
+
+    members.forEach((m) => {
+      const card = document.createElement('div');
+      const isRetired = section === 'Retired Faculty';
+      const hasPhoto = !!m.photo;
+      card.className = 'brother-card glass-card rounded-xl overflow-hidden' + (m.linkedin ? ' cursor-pointer' : ' cursor-default') + (isRetired ? ' opacity-70' : '');
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(40px)';
+      card.dataset.cardIndex = cardIdx++;
+      if (m.linkedin) {
+        card.addEventListener('click', () => window.open(m.linkedin, '_blank'));
+      }
+
+      const linkedinIcon = m.linkedin ? `<span class="text-dsp-gold/40 transition-colors"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>` : '';
+
+      if (hasPhoto) {
+        card.innerHTML = `
+          <div class="card-glow"></div>
+          <div class="relative h-52 bg-gray-100 overflow-hidden">
+            <img src="${m.photo}" alt="${m.name}" class="brother-photo w-full h-full object-cover object-top" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="w-full h-full items-center justify-center bg-gradient-to-br from-dsp-gold/10 to-dsp-gold/5 hidden absolute inset-0"><span class="text-3xl font-bold gold-text">${getInitials(m.name)}</span></div>
+          </div>
+          <div class="p-4 relative z-[11]">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-dsp-text font-semibold text-sm">${m.name}</p>
+              ${linkedinIcon}
+            </div>
+            <p class="text-dsp-gold text-xs">${m.role}</p>
+            ${m.subtitle ? `<p class="text-dsp-muted text-xs mt-1">${m.subtitle}</p>` : ''}
+          </div>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="card-glow"></div>
+          <div class="p-5 text-center relative z-[11]">
+            <div class="w-14 h-14 rounded-full bg-dsp-gold/10 flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-dsp-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg>
+            </div>
+            <p class="text-dsp-text font-semibold text-sm">${m.name}</p>
+            <p class="text-dsp-muted text-xs mt-0.5">${m.role}</p>
+            ${m.subtitle ? `<p class="text-dsp-gold/60 text-xs mt-0.5">${m.subtitle}</p>` : ''}
+          </div>
+        `;
+      }
+      container.appendChild(card);
+
+      // 3D tilt + cursor glow
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 6}deg) translateY(-10px) scale(1.03)`;
+        card.style.boxShadow = `0 25px 60px rgba(0,0,0,0.12), 0 0 40px rgba(207,181,59,0.1)`;
+        card.style.borderColor = 'rgba(207,181,59,0.35)';
+        const glow = card.querySelector('.card-glow');
+        if (glow) glow.style.background = `radial-gradient(600px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(207,181,59,0.08), transparent 60%)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0) scale(1)';
+        card.style.boxShadow = '';
+        card.style.borderColor = '';
+      });
+    });
+  });
+
+  // Scroll-triggered entrance
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const delay = (parseInt(card.dataset.cardIndex) % 4) * 80;
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, delay);
+        obs.unobserve(card);
+      }
+    });
+  }, { threshold: 0.1 });
+  container.querySelectorAll('.brother-card').forEach(c => obs.observe(c));
+}
+
+renderAllLeadership();
+
+// ==================== BROTHER AWARDS ====================
+const awardsGrid = document.getElementById('brother-awards-grid');
+BROTHER_AWARDS.forEach(award => {
+  const card = document.createElement('div');
+  card.className = 'glass-card rounded-xl p-5 card-hover';
+  card.innerHTML = `
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-full bg-dsp-gold/10 flex items-center justify-center shrink-0">
+        <svg class="w-5 h-5 text-dsp-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0016.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 01-2.77.89m-4.5 0a6.023 6.023 0 002.77-.89"/></svg>
+      </div>
+      <h4 class="text-dsp-text font-semibold text-sm">${award.name}</h4>
+    </div>
+    ${award.desc ? `<p class="text-dsp-muted text-xs mb-3 italic">${award.desc}</p>` : ''}
+    <div class="space-y-1">
+      <p class="text-xs"><span class="text-dsp-gold">Current:</span> <span class="text-dsp-text">${award.current}</span></p>
+      <p class="text-xs"><span class="text-dsp-muted">Previous:</span> <span class="text-dsp-muted">${award.past}</span></p>
+    </div>
+  `;
+  awardsGrid.appendChild(card);
+});
+
+// ==================== PHOTO TABS ====================
+document.querySelectorAll('.photo-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.photo-tab').forEach(t => { t.classList.remove('active'); t.classList.replace('text-dsp-gold', 'text-dsp-muted'); });
+    tab.classList.add('active');
+    tab.classList.replace('text-dsp-muted', 'text-dsp-gold');
+    document.getElementById('photo-gallery').classList.toggle('hidden', tab.dataset.tab !== 'gallery');
+    document.getElementById('photo-families').classList.toggle('hidden', tab.dataset.tab !== 'families');
+  });
+});
+
+// ==================== LIGHTBOX ====================
+let lightboxIndex = 0;
+
+function openLightbox(index) {
+  lightboxIndex = index;
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightbox-img').src = GALLERY_IMAGES[index];
+  document.getElementById('lightbox-counter').textContent = `${index + 1} / ${GALLERY_IMAGES.length}`;
+  lb.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function lightboxNext() {
+  lightboxIndex = (lightboxIndex + 1) % GALLERY_IMAGES.length;
+  document.getElementById('lightbox-img').src = GALLERY_IMAGES[lightboxIndex];
+  document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${GALLERY_IMAGES.length}`;
+}
+
+function lightboxPrev() {
+  lightboxIndex = (lightboxIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
+  document.getElementById('lightbox-img').src = GALLERY_IMAGES[lightboxIndex];
+  document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${GALLERY_IMAGES.length}`;
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('lightbox').classList.contains('hidden')) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') lightboxNext();
+    if (e.key === 'ArrowLeft') lightboxPrev();
+  }
+});
+
+// ==================== INIT PAGE FROM HASH ====================
+const initHash = window.location.hash.replace('#', '') || 'home';
+if (initHash !== 'home') {
+  showPage(initHash);
+} else {
+  // Home page: transparent navbar over hero
+  navbar.classList.add('navbar-hero');
+  hamburger.querySelectorAll('span').forEach(s => { s.classList.remove('bg-dsp-text'); s.classList.add('bg-white'); });
+}
+</script>
+
+</body>
+</html>
