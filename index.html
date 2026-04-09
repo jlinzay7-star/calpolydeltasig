@@ -608,7 +608,7 @@
         <p class="text-dsp-gold tracking-[0.25em] uppercase text-sm mb-3">Our Members</p>
         <h2 class="font-display text-4xl sm:text-5xl font-bold text-dsp-text">Collegiate Brothers</h2>
         <div class="w-20 h-0.5 gold-gradient mx-auto mt-6 mb-4"></div>
-        <p class="text-dsp-muted text-sm">71 brothers across 7 pledge classes</p>
+        <p class="text-dsp-muted text-sm">82 brothers across 8 pledge classes</p>
       </div>
       <div id="brothers-scroll" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
     </div>
@@ -978,6 +978,19 @@ const BROTHERS = {
     { name: 'Jacob Morgan', major: 'Accounting', family: 'Wanke', big: 'Josh Lavin', hometown: 'Sammamish, WA', photo: 'images/Deltasig-headshot-500w.jpg', linkedin: 'https://www.linkedin.com/in/jacob-p-morgan/' },
     { name: 'Yasna Mukundan', major: 'Finance', family: 'Barnhardt', big: 'Krista McCollough', hometown: 'Sacramento, CA', photo: 'images/IMG_9437-500w.jpg', linkedin: 'https://www.linkedin.com/in/yasna-mukundan/' },
     { name: 'Ash Pickett', major: 'HR/Management', family: 'Wanke', big: 'Maya Thoma', hometown: 'Fremont, CA', photo: 'images/IMG_8787-500w.jpg', linkedin: 'https://www.linkedin.com/in/ash-pickett/' }
+  ],
+  'gamma-chi': [
+    { name: 'Liz Correya', major: 'Finance', family: 'Wanke', big: 'Keya Mehta', hometown: 'Sammamish, WA' },
+    { name: 'Owen Beck', major: 'Finance', family: 'Barnhardt', big: 'Gael Morales', hometown: 'West Linn, OR', linkedin: 'https://www.linkedin.com/in/owenbeck' },
+    { name: 'Addie Cook', major: 'Finance', family: 'DiGiorgio', big: 'Taylor Pagano', hometown: 'Atlanta, GA', linkedin: 'https://www.linkedin.com/in/addiecook' },
+    { name: 'Sierra Pacifici', major: 'Undecided', family: 'Royal', big: 'Madi Housholder', hometown: 'Los Angeles, CA', linkedin: 'https://www.linkedin.com/in/sierra-pacifici' },
+    { name: 'Eitan Steinberg-Tatman', major: 'ITP', family: 'Wanke', big: 'Gianna Murrell', hometown: 'San Diego, CA', linkedin: 'https://www.linkedin.com/in/eitan-st/' },
+    { name: 'Dale Kerr', major: 'Business Admin', family: 'Wanke', big: 'Nate Moore', hometown: 'Santa Cruz, CA', linkedin: 'https://www.linkedin.com/in/dale-kerr' },
+    { name: 'Sarah Pruett', major: 'Undecided', family: 'Royal', big: 'Jenna De Jong', hometown: 'San Diego, CA', linkedin: 'https://www.linkedin.com/in/sarah-pruett777' },
+    { name: 'Grace' },
+    { name: 'Hudson' },
+    { name: 'Kendall' },
+    { name: 'Nathan' }
   ]
 };
 
@@ -1434,7 +1447,8 @@ const CLASS_ORDER = [
   { key: 'gamma-sigma', label: '\u0393\u03A3 — Gamma Sigma', season: "Winter '24" },
   { key: 'gamma-tau', label: '\u0393\u03A4 — Gamma Tau', season: "Fall '24" },
   { key: 'gamma-upsilon', label: '\u0393\u03A5 — Gamma Upsilon', season: "Winter '25" },
-  { key: 'gamma-phi', label: '\u0393\u03A6 — Gamma Phi', season: "Fall '25" }
+  { key: 'gamma-phi', label: '\u0393\u03A6 — Gamma Phi', season: "Fall '25" },
+  { key: 'gamma-chi', label: '\u0393\u03A7 — Gamma Chi', season: "Winter '26" }
 ];
 
 function getInitials(name) {
@@ -1477,20 +1491,20 @@ function renderAllBrothers() {
       card.innerHTML = `
         <div class="card-glow"></div>
         <div class="relative h-52 bg-gray-100 overflow-hidden">
-          <img src="${b.photo}" alt="${b.name}" class="brother-photo w-full h-full object-cover object-top" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-          <div class="w-full h-full items-center justify-center bg-gradient-to-br from-dsp-gold/10 to-dsp-gold/5 hidden absolute inset-0"><span class="text-3xl font-bold gold-text">${getInitials(b.name)}</span></div>
+          ${b.photo ? `<img src="${b.photo}" alt="${b.name}" class="brother-photo w-full h-full object-cover object-top" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
+          <div class="w-full h-full items-center justify-center bg-gradient-to-br from-dsp-gold/10 to-dsp-gold/5 ${b.photo ? 'hidden' : 'flex'} absolute inset-0"><span class="text-3xl font-bold gold-text">${getInitials(b.name)}</span></div>
         </div>
         <div class="p-4 relative z-[11]">
           <div class="flex items-center justify-between mb-1">
             <p class="text-dsp-text font-semibold text-sm">${b.name}</p>
             ${linkedinIcon}
           </div>
-          <p class="text-dsp-muted text-xs mb-2">${b.major}</p>
-          <div class="flex flex-wrap gap-1.5 mb-2">
+          ${b.major ? `<p class="text-dsp-muted text-xs mb-2">${b.major}</p>` : ''}
+          ${b.family ? `<div class="flex flex-wrap gap-1.5 mb-2">
             <span class="text-[10px] px-2 py-0.5 rounded-full ${fc.bg} ${fc.text} border ${fc.border}">${b.family}</span>
-          </div>
-          <p class="text-dsp-muted text-xs"><span class="text-dsp-gold/60">Big:</span> ${b.big}</p>
-          <p class="text-dsp-muted text-xs"><span class="text-dsp-gold/60">From:</span> ${b.hometown}</p>
+          </div>` : ''}
+          ${b.big ? `<p class="text-dsp-muted text-xs"><span class="text-dsp-gold/60">Big:</span> ${b.big}</p>` : ''}
+          ${b.hometown ? `<p class="text-dsp-muted text-xs"><span class="text-dsp-gold/60">From:</span> ${b.hometown}</p>` : ''}
         </div>
       `;
       container.appendChild(card);
