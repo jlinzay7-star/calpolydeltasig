@@ -72,7 +72,9 @@ function prompt(question) {
   rl.close();
 
   if (pw1 !== pw2) { console.error('\n❌ Passwords do not match.'); process.exit(1); }
-  if (pw1.length < 8) { console.error('\n❌ Use at least 8 characters.'); process.exit(1); }
+  // Minimum length is intentionally low — the chapter shares one short password.
+  // Real security is rate-limit (5 attempts / IP / 15 min) + bcrypt cost 12, not length.
+  if (pw1.length < 4) { console.error('\n❌ Use at least 4 characters.'); process.exit(1); }
 
   const hash = await bcrypt.hash(pw1, 12);
 

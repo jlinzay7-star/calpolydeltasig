@@ -7,6 +7,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { verify } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
 const ALLOWED_ORIGINS = [
+  "https://calpolydeltasigmapi.netlify.app",
   "https://calpolydeltasig.netlify.app",
   "https://calpolydeltasig.com",
   "https://www.calpolydeltasig.com",

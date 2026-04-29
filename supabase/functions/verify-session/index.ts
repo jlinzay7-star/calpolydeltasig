@@ -6,6 +6,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { verify } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
 const ALLOWED_ORIGINS = [
+  "https://calpolydeltasigmapi.netlify.app",
   "https://calpolydeltasig.netlify.app",
   "https://calpolydeltasig.com",
   "https://www.calpolydeltasig.com",

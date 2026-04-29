@@ -48,6 +48,19 @@ ALTER TABLE portal_links  ENABLE ROW LEVEL SECURITY;
 -- Edge Functions use SUPABASE_SERVICE_ROLE_KEY and bypass RLS.
 
 -- ==============================================================
+-- Table-level GRANTs. RLS gates rows; GRANTs gate the table.
+-- Without these, service_role cannot read or write at all — even
+-- though it bypasses RLS — and every Edge Function call 403s.
+-- (Tables created via raw SQL migration do NOT inherit the default
+-- Supabase grants the dashboard wizard would apply.)
+-- ==============================================================
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.portal_access TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.auth_attempts TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.portal_links  TO service_role;
+-- anon and authenticated intentionally have NO data privileges.
+-- Browsers reach these tables only through Edge Functions.
+
+-- ==============================================================
 -- Housekeeping: auto-delete auth_attempts older than 30 days
 -- (keeps the table from growing forever). Runs on every insert.
 -- ==============================================================
@@ -64,14 +77,6 @@ AFTER INSERT ON auth_attempts
 FOR EACH STATEMENT
 EXECUTE FUNCTION trim_auth_attempts();
 
--- ==============================================================
--- Seed a starter set of portal links. Edit or replace later
--- via Dashboard → Table Editor → portal_links.
--- ==============================================================
-INSERT INTO portal_links (label, description, url, icon, sort_order) VALUES
-  ('Chapter Drive',      'Files, resumes, recruitment materials',      'https://drive.google.com/YOUR_LINK_HERE',      'folder',   10),
-  ('Meeting Minutes',    'Weekly chapter meeting notes',                'https://docs.google.com/YOUR_LINK_HERE',       'doc',      20),
-  ('Officer Handbook',   'Role responsibilities, transition guides',    'https://docs.google.com/YOUR_LINK_HERE',       'book',     30),
-  ('Bylaws & Constitution','Chapter governance documents',              'https://docs.google.com/YOUR_LINK_HERE',       'scroll',   40),
-  ('Dues Portal',        'Pay chapter dues',                            'https://YOUR_DUES_LINK',                       'card',     50),
-  ('Event Calendar',     'Upcoming chapter events',                     'https://calendar.google.com/YOUR_LINK',        'calendar', 60);
+-- portal_links is intentionally seeded out-of-band (Supabase Dashboard or
+-- a separate seed script), not from this migration. Migrations should describe
+-- schema, not chapter data.

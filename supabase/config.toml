@@ -1,0 +1,24 @@
+project_id = "kijwqxccuxxavuvhcbfw"
+
+# ==============================================================
+# Per-function gateway settings.
+#
+# verify_jwt = false on these three functions because the portal uses its
+# OWN JWT scheme (signed with the JWT_SECRET env var, not the project JWT
+# secret). The Supabase gateway's default behaviour is to verify the
+# Authorization header against the project secret — that would reject our
+# legitimate portal JWTs. Each function does its own validation via djwt.
+#
+# DO NOT remove these — without verify_jwt=false the live portal will 401
+# every authenticated call (get-portal-links, verify-session) before our
+# code ever runs. verify-password also gets verify_jwt=false because the
+# password-entry call happens BEFORE a JWT exists.
+# ==============================================================
+[functions.verify-password]
+verify_jwt = false
+
+[functions.verify-session]
+verify_jwt = false
+
+[functions.get-portal-links]
+verify_jwt = false

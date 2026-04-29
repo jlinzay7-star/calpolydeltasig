@@ -12,6 +12,7 @@ import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 import { create, getNumericDate } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
 const ALLOWED_ORIGINS = [
+  "https://calpolydeltasigmapi.netlify.app",
   "https://calpolydeltasig.netlify.app",
   "https://calpolydeltasig.com",
   "https://www.calpolydeltasig.com",
@@ -112,7 +113,11 @@ serve(async (req) => {
     }
 
     // ---- Compare ----
-    const ok = await bcrypt.compare(password, access.password_hash);
+    // NOTE: use compareSync, NOT compare. The async compare() in deno.land/x/bcrypt@0.4.1
+    // tries to spawn a Web Worker, which is not available in Supabase Edge Runtime
+    // (throws "Worker is not defined"). compareSync runs in-line — fine for our load
+    // (one comparison per login attempt at cost 12 ≈ 100ms blocking).
+    const ok = bcrypt.compareSync(password, access.password_hash);
 
     // Log attempt (fire-and-forget, non-blocking)
     supabase.from("auth_attempts").insert({ ip_address: ip, success: ok }).then();
