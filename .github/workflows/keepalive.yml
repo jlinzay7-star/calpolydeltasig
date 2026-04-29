@@ -10,7 +10,8 @@
 #   Supabase's free tier auto-pauses a project after 7 days of no activity.
 #   That kicks in over summer break / quieter quarters and would silently
 #   break the brother portal until someone notices and clicks "Restore" in
-#   the dashboard. Pinging every 3 days keeps the project warm with margin.
+#   the dashboard. A daily ping keeps the project warm with comfortable
+#   margin against the 7-day threshold.
 #
 # IF THIS WORKFLOW FAILS:
 #   1. Check the Supabase project status — if paused, restore via dashboard
@@ -25,10 +26,13 @@ name: Supabase keep-alive
 
 on:
   schedule:
-    # Noon UTC every 3 days. Cron alone gives an uneven gap at month
-    # boundaries (max ~4 days in February), still well under the 7-day
-    # pause threshold.
-    - cron: '0 12 */3 * *'
+    # Runs daily at 12:00 UTC. Daily is overkill for a 7-day pause
+    # threshold, but it's the simplest cron expression with no edge cases —
+    # preferred over `*/3` which means "the 1st, 4th, 7th... of each
+    # month" and resets phase at month boundaries (e.g. Feb 28 → Mar 1 is
+    # only 1 day apart). GitHub Actions cost is negligible (~15 min/month
+    # of the 2000-min free allowance).
+    - cron: '0 12 * * *'
   # Manual trigger — used to test the workflow and to ping on demand
   # if Supabase ever auto-pauses unexpectedly.
   workflow_dispatch:
