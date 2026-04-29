@@ -1,0 +1,9 @@
+{
+  "name": "dsp-portal-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local scripts for the DSP portal backend (password seeding, etc.). Not deployed.",
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  }
+}
