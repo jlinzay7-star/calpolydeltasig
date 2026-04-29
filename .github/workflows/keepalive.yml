@@ -1,0 +1,73 @@
+# =============================================================================
+# Supabase keep-alive
+#
+# Pings the kappa-mu-portal Supabase project's verify-session Edge Function
+# every 3 days. The function returns HTTP 200 + {"valid": false} for any
+# request without a real JWT — that's the expected response. We don't care
+# about the body; we only need Supabase to record activity on the project.
+#
+# WHY THIS EXISTS:
+#   Supabase's free tier auto-pauses a project after 7 days of no activity.
+#   That kicks in over summer break / quieter quarters and would silently
+#   break the brother portal until someone notices and clicks "Restore" in
+#   the dashboard. Pinging every 3 days keeps the project warm with margin.
+#
+# IF THIS WORKFLOW FAILS:
+#   1. Check the Supabase project status — if paused, restore via dashboard
+#      first, then re-run this workflow.
+#   2. Verify the SUPABASE_ANON_KEY secret hasn't been rotated. If it has,
+#      update at: Settings → Secrets and variables → Actions.
+#   3. If verify-session returns something other than HTTP 200, check the
+#      function still has verify_jwt = false in supabase/config.toml.
+# =============================================================================
+
+name: Supabase keep-alive
+
+on:
+  schedule:
+    # Noon UTC every 3 days. Cron alone gives an uneven gap at month
+    # boundaries (max ~4 days in February), still well under the 7-day
+    # pause threshold.
+    - cron: '0 12 */3 * *'
+  # Manual trigger — used to test the workflow and to ping on demand
+  # if Supabase ever auto-pauses unexpectedly.
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping verify-session
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Hit verify-session with throwaway token
+        env:
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::SUPABASE_ANON_KEY secret is not set."
+            echo "Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+          STATUS=$(curl -sS -o /tmp/body.txt -w "%{http_code}" -X POST \
+            "https://kijwqxccuxxavuvhcbfw.supabase.co/functions/v1/verify-session" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer keepalive.placeholder.token" \
+            -H "Content-Type: application/json")
+
+          BODY=$(cat /tmp/body.txt)
+          echo "HTTP $STATUS"
+          echo "Body: $BODY"
+
+          # We expect 200 with {"valid":false}. Anything else means the
+          # function (or gateway) is unhappy and we should investigate.
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::Expected HTTP 200, got $STATUS. Investigate before next pause window."
+            exit 1
+          fi
+
+          if ! echo "$BODY" | grep -q '"valid":false'; then
+            echo "::warning::HTTP 200 but body did not contain {\"valid\":false}. Function may have changed shape."
+          fi
+
+          echo "::notice::Keep-alive ping succeeded."
