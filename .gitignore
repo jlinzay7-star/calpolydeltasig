@@ -10,6 +10,9 @@
 node_modules/
 scripts/node_modules/
 
+# Supabase CLI local state (project-ref cache, version markers, pooler url)
+supabase/.temp/
+
 # Screenshots (keep locally, don't ship)
 /tmp/
 .claude/

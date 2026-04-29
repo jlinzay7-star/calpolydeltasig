@@ -4055,11 +4055,11 @@ document.addEventListener('keydown', (e) => {
 //
 // Configure these two once:
 const PORTAL_CONFIG = {
-  // Your Supabase project's base functions URL — set after you create the project.
-  // Looks like: https://YOURPROJECT.supabase.co/functions/v1
-  supabaseFunctionsUrl: 'https://YOURPROJECT.supabase.co/functions/v1',
-  // Anon key from Supabase Dashboard → Project Settings → API. Safe to expose.
-  supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY',
+  // Supabase project: kappa-mu-portal (chapter Supabase account).
+  // Functions URL = project URL + /functions/v1. Anon key is the legacy
+  // (JWT-format) anon public key — safe to ship in browser, can't bypass RLS.
+  supabaseFunctionsUrl: 'https://kijwqxccuxxavuvhcbfw.supabase.co/functions/v1',
+  supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpandxeGNjdXh4YXZ1dmhjYmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0OTQ3OTQsImV4cCI6MjA5MzA3MDc5NH0.Nd7IBvf2sMdRBg3WGi_5pRi_nLbtpUCPEXCoeEJ_E0Y',
 };
 const PORTAL_TOKEN_KEY = 'dsp_portal_token';
 
