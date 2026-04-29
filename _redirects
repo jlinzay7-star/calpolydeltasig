@@ -1,0 +1,6 @@
+# Netlify _redirects — no actual redirects needed today.
+# This file reserved for future use (e.g., domain canonicalization).
+
+# Force HTTPS (Netlify does this by default, but explicit is nice)
+http://calpolydeltasig.com/*   https://calpolydeltasig.com/:splat   301!
+http://www.calpolydeltasig.com/* https://www.calpolydeltasig.com/:splat 301!

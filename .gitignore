@@ -1,0 +1,15 @@
+# Environment secrets — NEVER commit
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Local-only
+.DS_Store
+.netlify/
+node_modules/
+scripts/node_modules/
+
+# Screenshots (keep locally, don't ship)
+/tmp/
+.claude/
