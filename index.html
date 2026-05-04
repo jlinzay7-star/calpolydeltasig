@@ -263,11 +263,12 @@
     @keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
     .bounce-slow { animation: bounce-slow 2s ease-in-out infinite; }
 
-    /* Marquee */
-    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    @keyframes marquee-reverse { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-    .marquee-track { animation: marquee 35s linear infinite; }
-    .marquee-track-reverse { animation: marquee-reverse 35s linear infinite; }
+    /* Marquee — single keyframe; reverse track uses animation-direction
+       (canonical pattern; iOS Safari mishandles a keyframe that STARTS at
+       a non-zero percentage transform, which broke the bottom companies row). */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-track         { animation: marquee 35s linear infinite; }
+    .marquee-track-reverse { animation: marquee 35s linear infinite reverse; }
     .marquee-track:hover, .marquee-track-reverse:hover { animation-play-state: paused; }
 
     /* Testimonial carousel */
@@ -975,37 +976,29 @@
       </button>
       <!-- Scrollable track (row 1) -->
       <div id="gallery-track" class="flex gap-6 overflow-x-auto scroll-smooth px-8 sm:px-16 pb-4 cursor-grab active:cursor-grabbing" style="scrollbar-width: none; -ms-overflow-style: none;">
-        <div class="gallery-item shrink-0 w-[500px] sm:w-[650px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/group-6.jpg" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[500px] sm:w-[650px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/group-6.jpg" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/formal-night.jpg" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/formal-night.jpg" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/carousel-1.png" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/carousel-1.png" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/group-3.png" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/group-3.png" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/tahoe-ice-rink.jpg" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/tahoe-ice-rink.jpg" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/group-5.jpg" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/group-5.jpg" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/group-4.png" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/group-4.png" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
-        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative group/item shadow-lg border border-white/10 hover:border-dsp-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-dsp-gold/10">
-          <img src="images/group-2.png" alt="Chapter moment" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110" loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+        <div class="gallery-item shrink-0 w-[350px] sm:w-[450px] aspect-[3/2] rounded-2xl overflow-hidden relative shadow-lg border border-white/10">
+          <img src="images/group-2.png" alt="Chapter moment" class="w-full h-full object-cover" loading="lazy">
         </div>
       </div>
 
@@ -3280,6 +3273,14 @@ function initGalleryMarquee(opts) {
   window.addEventListener('resize', calcHalf);
 
   let translateX = 0;
+  // targetX is what arrow clicks push toward. tick() eases translateX → targetX
+  // when they differ; otherwise it applies the natural speed-based drift. This
+  // way multiple rapid arrow clicks just keep accumulating into targetX instead
+  // of spawning competing rAF loops (the old animateBy bug).
+  let targetX = 0;
+  // After an arrow click, suppress auto-drift for this many ms so the user has
+  // time to look at what they advanced to.
+  let pauseUntil = 0;
   let isDragging = false;
   let dragStartX = 0;
   let dragStartT = 0;
@@ -3287,9 +3288,10 @@ function initGalleryMarquee(opts) {
   function apply() { inner.style.transform = `translate3d(${translateX}px,0,0)`; }
   function wrap() {
     if (halfWidth <= 0) return;
-    // direction = -1 (default, scrolls right-to-left) or +1 (left-to-right)
-    if (translateX <= -halfWidth) translateX += halfWidth;
-    else if (translateX >= 0) translateX -= halfWidth;
+    // direction = -1 (default, scrolls right-to-left) or +1 (left-to-right).
+    // Adjust targetX in lock-step so easing doesn't snap when we cross the seam.
+    if (translateX <= -halfWidth) { translateX += halfWidth; targetX += halfWidth; }
+    else if (translateX >= 0)     { translateX -= halfWidth; targetX -= halfWidth; }
   }
 
   let rafId = null, lastTs = 0;
@@ -3297,7 +3299,16 @@ function initGalleryMarquee(opts) {
     const dt = lastTs ? ts - lastTs : 0;
     lastTs = ts;
     if (!isDragging && halfWidth > 0 && dt < 250) {
-      translateX -= (opts.speed * opts.direction * dt) / 1000;
+      const diff = targetX - translateX;
+      if (Math.abs(diff) > 0.5) {
+        // Arrow-click ease — pull toward target. Factor tuned for ~60fps feel;
+        // larger gaps cover ground fast, then settle smoothly.
+        translateX += diff * 0.18;
+      } else if (ts >= pauseUntil) {
+        // Natural marquee drift.
+        translateX -= (opts.speed * opts.direction * dt) / 1000;
+        targetX = translateX;
+      }
       wrap();
       apply();
     }
@@ -3313,19 +3324,23 @@ function initGalleryMarquee(opts) {
     rafId = null;
   }
 
-  // Pointer-based drag (covers mouse + touch + pen via PointerEvent)
+  // Pointer-based drag (covers mouse + touch + pen via PointerEvent).
+  // Drag bypasses the easing — sync targetX so the moment the user lets go,
+  // tick() doesn't yank the carousel back to a stale target.
   track.style.cursor = 'grab';
   track.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     isDragging = true;
     dragStartX = e.clientX;
     dragStartT = translateX;
+    targetX = translateX;
     track.style.cursor = 'grabbing';
     try { track.setPointerCapture(e.pointerId); } catch (_) {}
   });
   track.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
     translateX = dragStartT + (e.clientX - dragStartX);
+    targetX = translateX;
     wrap();
     apply();
   });
@@ -3341,29 +3356,27 @@ function initGalleryMarquee(opts) {
   track.addEventListener('pointercancel', endDrag);
   track.addEventListener('pointerleave', endDrag);
 
-  // Arrow buttons (eased transform animation)
+  // Arrow buttons — push targetX; tick() handles the rest. Multiple rapid
+  // clicks accumulate cleanly. Auto-drift pauses for 2s after each click.
   if (opts.prevBtnId || opts.nextBtnId) {
     const step = () => (items[0]?.offsetWidth || 450) + opts.gap;
-    function animateBy(delta) {
-      stop();
-      const from = translateX;
-      const to = from + delta;
-      const dur = 400;
-      let startT = null;
-      function frame(ts) {
-        if (!startT) startT = ts;
-        const p = Math.min((ts - startT) / dur, 1);
-        const e = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
-        translateX = from + (to - from) * e;
-        wrap();
-        apply();
-        if (p < 1) requestAnimationFrame(frame);
-        else start();
+    const advance = (delta) => {
+      targetX += delta;
+      pauseUntil = performance.now() + 2000;
+    };
+    document.getElementById(opts.prevBtnId)?.addEventListener('click', () => advance(step()));
+    document.getElementById(opts.nextBtnId)?.addEventListener('click', () => advance(-step()));
+  }
+
+  // Pause the rAF loop when the carousel is offscreen — most of the page life,
+  // the gallery isn't visible, and constant ticks waste compositor work.
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) start(); else stop();
       }
-      requestAnimationFrame(frame);
-    }
-    document.getElementById(opts.prevBtnId)?.addEventListener('click', () => animateBy(step()));
-    document.getElementById(opts.nextBtnId)?.addEventListener('click', () => animateBy(-step()));
+    }, { rootMargin: '50px' });
+    io.observe(track);
   }
 
   start();
