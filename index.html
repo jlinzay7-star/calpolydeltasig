@@ -4072,6 +4072,9 @@ const PORTAL_CONFIG = {
   supabaseFunctionsUrl: 'https://kijwqxccuxxavuvhcbfw.supabase.co/functions/v1',
   supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpandxeGNjdXh4YXZ1dmhjYmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0OTQ3OTQsImV4cCI6MjA5MzA3MDc5NH0.Nd7IBvf2sMdRBg3WGi_5pRi_nLbtpUCPEXCoeEJ_E0Y',
 };
+// Stored in sessionStorage (NOT localStorage) — clears when the tab closes,
+// so brothers must re-enter the password every fresh visit. The JWT itself
+// is good for 24h, but session storage shortens that to "until tab close".
 const PORTAL_TOKEN_KEY = 'dsp_portal_token';
 
 async function callPortalFn(name, { method = 'POST', body, token } = {}) {
@@ -4130,7 +4133,7 @@ async function checkPortalPassword() {
       body: { password: input.value },
     });
     if (ok && json.token) {
-      try { localStorage.setItem(PORTAL_TOKEN_KEY, json.token); } catch (e) {}
+      try { sessionStorage.setItem(PORTAL_TOKEN_KEY, json.token); } catch (e) {}
       input.value = '';
       await unlockPortal(json.token);
     } else {
@@ -4166,7 +4169,7 @@ async function unlockPortal(token) {
 }
 
 function lockPortal() {
-  try { localStorage.removeItem(PORTAL_TOKEN_KEY); } catch (e) {}
+  try { sessionStorage.removeItem(PORTAL_TOKEN_KEY); } catch (e) {}
   document.getElementById('portal-gate').classList.remove('hidden');
   document.getElementById('portal-content').classList.add('hidden');
   const input = document.getElementById('portal-password');
@@ -4180,13 +4183,13 @@ function lockPortal() {
 // Auto-unlock: verify existing token on load
 (async () => {
   let token;
-  try { token = localStorage.getItem(PORTAL_TOKEN_KEY); } catch (e) {}
+  try { token = sessionStorage.getItem(PORTAL_TOKEN_KEY); } catch (e) {}
   if (!token) return;
   const { ok, json } = await callPortalFn('verify-session', { method: 'POST', token });
   if (ok && json.valid) {
     await unlockPortal(token);
   } else {
-    try { localStorage.removeItem(PORTAL_TOKEN_KEY); } catch (e) {}
+    try { sessionStorage.removeItem(PORTAL_TOKEN_KEY); } catch (e) {}
   }
 })();
 
